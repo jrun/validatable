@@ -1,0 +1,6 @@
+require 'forwardable'
+require 'errors'
+require 'base'
+require 'validation_base'
+require 'validates_format_of'
+require 'validates_presence_of'
