@@ -1,4 +1,7 @@
 require 'test/unit'
+require 'rubygems'
+require 'mocha'
+require 'stubba'
 require File.dirname(__FILE__) + '/../lib/validatable'
 
 class << Test::Unit::TestCase

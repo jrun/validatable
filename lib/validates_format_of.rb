@@ -1,14 +1,13 @@
 module Validatable
   class ValidatesFormatOf < ValidationBase
-    attr_accessor :attribute, :regex, :message
+    attr_accessor :regex
     def initialize(attribute, regex, message)
-      self.attribute = attribute
       self.regex = regex
-      super message
+      super attribute, message
     end
   
     def valid?(instance)
-      instance.send(self.attribute) =~ self.regex
+      instance.send(self.attribute) =~ self.regex && true
     end
   end
 end

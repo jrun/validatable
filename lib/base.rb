@@ -37,6 +37,7 @@ module Validatable
   end
   
   def valid?
+    errors.clear
     self.class.validate(self)
   end
   

@@ -1,49 +1,48 @@
-require 'test_helper'
+require File.expand_path(File.dirname(__FILE__) + '/test_helper')
 
 class ValidatableTest < Test::Unit::TestCase
   test "given no presence when object is validated then valid returns false" do
+    Validatable::ValidatesPresenceOf.expects(:new).with(:name, "can't be empty")
     klass = Class.new
     klass.class_eval do
       include Validatable
-      attr_accessor :name
       validates_presence_of :name
     end
-    
-    assert_equal false, klass.new.valid?
-  end
-
-  test "given no presence when object is validated then it contains errors" do
-    klass = Class.new
-    klass.class_eval do
-      include Validatable
-      attr_accessor :name
-      validates_presence_of :name
-    end
-    instance = klass.new
-    instance.valid?
-    assert_equal "can't be empty", instance.errors.on(:name)
   end
   
   test "given invalid format when object is validated then valid returns false" do
+    Validatable::ValidatesFormatOf.expects(:new).with(:name, /.+/, "is invalid")
     klass = Class.new
     klass.class_eval do
       include Validatable
-      attr_accessor :name
       validates_format_of :name, :with=>/.+/
     end
-    
-    assert_equal false, klass.new.valid?
   end
 
-  test "given invalid format when object is validated then it contain errors" do
+  test "when validate is executed, then messages are added for each validation that fails" do
     klass = Class.new
     klass.class_eval do
       include Validatable
-      attr_accessor :name
-      validates_format_of :name, :with=>/.+/
+    end
+    klass.validations << stub(:valid? => false, :attribute => 'attribute', :message => 'message')
+    klass.validations << stub(:valid? => false, :attribute => 'attribute2', :message => 'message2')
+    instance=mock
+    instance.expects(:errors).returns(errors=mock).times 3
+    errors.expects(:add).with('attribute', 'message')
+    errors.expects(:add).with('attribute2', 'message2')
+    errors.expects(:empty?)
+    klass.validate(instance)
+  end
+
+  test "when valid is called, then the errors collection is cleared and reinitialized" do
+    klass = Class.new
+    klass.class_eval do
+      include Validatable
     end
     instance = klass.new
+    instance.errors.add(:attribute, "message")
     instance.valid?
-    assert_equal "is invalid", instance.errors.on(:name)
+    assert_equal true, instance.errors.empty?
   end
+  
 end
