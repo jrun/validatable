@@ -1,5 +1,5 @@
 module Validatable
-  class ValidatesFormatOf < ValidationBase
+  class ValidatesFormatOf < ValidationBase #:nodoc:
     attr_accessor :regex
     def initialize(attribute, regex, message)
       self.regex = regex

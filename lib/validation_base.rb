@@ -1,3 +1,9 @@
 module Validatable
-  ValidationBase = Struct.new :attribute, :message
+  class ValidationBase #:nodoc:
+    attr_accessor :attribute, :message
+    
+    def initialize(attribute, message)
+      @attribute, @message = attribute, message
+    end
+  end
 end
