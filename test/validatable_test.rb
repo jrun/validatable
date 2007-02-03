@@ -1,27 +1,17 @@
 require File.expand_path(File.dirname(__FILE__) + '/test_helper')
 
 class ValidatableTest < Test::Unit::TestCase
-  test "given no presence when object is validated then valid returns false" do
-    Validatable::ValidatesPresenceOf.expects(:new).with(:name, "can't be empty")
-    klass = Class.new
-    klass.class_eval do
+  test "given a validation that returns false when object is validated then valid returns false" do
+    validation = stub(:valid? => false, :attribute => "attribute", :message => "message")
+    klass = Class.new do
       include Validatable
-      validates_presence_of :name
+      validations << validation
     end
+    assert_equal false, klass.new.valid?
   end
   
-  test "given invalid format when object is validated then valid returns false" do
-    Validatable::ValidatesFormatOf.expects(:new).with(:name, /.+/, "is invalid")
-    klass = Class.new
-    klass.class_eval do
-      include Validatable
-      validates_format_of :name, :with=>/.+/
-    end
-  end
-
   test "when validate is executed, then messages are added for each validation that fails" do
-    klass = Class.new
-    klass.class_eval do
+    klass = Class.new do
       include Validatable
     end
     klass.validations << stub(:valid? => false, :attribute => 'attribute', :message => 'message')
@@ -35,8 +25,7 @@ class ValidatableTest < Test::Unit::TestCase
   end
 
   test "when valid is called, then the errors collection is cleared and reinitialized" do
-    klass = Class.new
-    klass.class_eval do
+    klass = Class.new do
       include Validatable
     end
     instance = klass.new
