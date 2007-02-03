@@ -15,20 +15,19 @@ class ValidatableTest < Test::Unit::TestCase
       include Validatable
       include_validations_for :anything, :else
     end
-    assert_equal [:anything, :else], klass.children_to_validate
+    assert_equal [:anything, :else], klass.send(:children_to_validate)
   end
   
   test "when validate is executed, then messages are added for each validation that fails" do
     klass = Class.new do
       include Validatable
     end
-    klass.validations << stub(:valid? => false, :attribute => 'attribute', :message => 'message')
-    klass.validations << stub(:valid? => false, :attribute => 'attribute2', :message => 'message2')
+    klass.send(:validations) << stub(:valid? => false, :attribute => 'attribute', :message => 'message')
+    klass.send(:validations) << stub(:valid? => false, :attribute => 'attribute2', :message => 'message2')
     instance=mock
-    instance.expects(:errors).returns(errors=mock).times 3
+    instance.expects(:errors).returns(errors=mock).times 2
     errors.expects(:add).with('attribute', 'message')
     errors.expects(:add).with('attribute2', 'message2')
-    errors.expects(:empty?)
     klass.validate(instance)
   end
 

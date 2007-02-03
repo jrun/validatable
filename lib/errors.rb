@@ -12,7 +12,7 @@ module Validatable
       errors[attribute.to_sym] = message
     end
 
-    def errors
+    def errors #:nodoc:
       @errors ||= {}
     end
   end

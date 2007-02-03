@@ -16,27 +16,10 @@ module Validatable
       children_to_validate.concat args
     end
     
-    def children_to_validate
-      @children_to_validate ||= []
-    end
-    
-    def validate_all(args, &block)
-      options = args.last.is_a?(Hash) ? args.pop : {}
-      args.each do |attribute|
-        yield attribute, options
-      end
-    end
-    protected :validate_all
-    
-    def validations
-      @validations ||= []
-    end
-  
     def validate(instance)
       self.validations.each do |validation|
         instance.errors.add(validation.attribute, validation.message) unless validation.valid?(instance)
       end
-      instance.errors.empty?
     end
     
     def validate_children(instance)
@@ -47,6 +30,22 @@ module Validatable
           instance.errors.add(attribute, message)
         end
       end
+    end
+
+    protected
+    def validate_all(args, &block)
+      options = args.last.is_a?(Hash) ? args.pop : {}
+      args.each do |attribute|
+        yield attribute, options
+      end
+    end
+    
+    def children_to_validate
+      @children_to_validate ||= []
+    end
+    
+    def validations
+      @validations ||= []
     end
   end
   

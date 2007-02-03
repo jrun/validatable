@@ -1,0 +1,27 @@
+= Validatable
+
+Validatable is a library for adding validations.
+
+by Jay[http://jayfields.blogspot.com] Fields[http://jayfields.blogspot.com]
+
+== Download and Installation
+
+You can download Validatable from here[http://rubyforge.org/projects/validatable] or install it with the following command.
+
+ $ gem install validatable
+
+== License
+ 	
+You may use, copy and redistribute this library under the same terms as Ruby itself (see http://www.ruby-lang.org/en/LICENSE.txt).
+
+== Examples
+
+See the tests for more examples
+
+=== Test Helper
+
+<%= File.readlines("test/test_helper.rb").collect { |line| "    " + line } %>
+
+=== Functional Tests
+
+<%= File.readlines("test/functional_test.rb").collect { |line| "    " + line } %>
