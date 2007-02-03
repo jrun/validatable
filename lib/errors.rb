@@ -2,7 +2,7 @@ module Validatable
   class Errors
     extend Forwardable
     
-    def_delegators :errors, :empty?, :clear
+    def_delegators :errors, :empty?, :clear, :each
     
     def on(attribute)
       errors[attribute.to_sym]

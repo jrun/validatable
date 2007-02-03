@@ -10,6 +10,14 @@ class ValidatableTest < Test::Unit::TestCase
     assert_equal false, klass.new.valid?
   end
   
+  test "when validations are included for a child, then the list is maintained as an array of args" do
+    klass = Class.new do
+      include Validatable
+      include_validations_for :anything, :else
+    end
+    assert_equal [:anything, :else], klass.children_to_validate
+  end
+  
   test "when validate is executed, then messages are added for each validation that fails" do
     klass = Class.new do
       include Validatable

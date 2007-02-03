@@ -12,6 +12,14 @@ module Validatable
       end
     end
     
+    def include_validations_for(*args)
+      children_to_validate.concat args
+    end
+    
+    def children_to_validate
+      @children_to_validate ||= []
+    end
+    
     def validate_all(args, &block)
       options = args.last.is_a?(Hash) ? args.pop : {}
       args.each do |attribute|
@@ -30,6 +38,16 @@ module Validatable
       end
       instance.errors.empty?
     end
+    
+    def validate_children(instance)
+      self.children_to_validate.each do |child_name|
+        child = instance.send child_name
+        child.valid?
+        child.errors.each do |attribute, message|
+          instance.errors.add(attribute, message)
+        end
+      end
+    end
   end
   
   def self.included(klass)
@@ -39,6 +57,8 @@ module Validatable
   def valid?
     errors.clear
     self.class.validate(self)
+    self.class.validate_children(self)
+    errors.empty?
   end
   
   def errors
