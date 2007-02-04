@@ -1,4 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + '/test_helper')
+require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 
 class ValidatableTest < Test::Unit::TestCase
   test "given a validation that returns false when object is validated then valid returns false" do

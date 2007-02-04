@@ -1,4 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + '/test_helper')
+require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 
 class ErrorsTest < Test::Unit::TestCase
   test "when an error is added, then it can be returned from on" do

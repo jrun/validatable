@@ -24,4 +24,4 @@ See the tests for more examples
 
 === Functional Tests
 
-<%= File.readlines("test/functional_test.rb").collect { |line| "    " + line } %>
+<%= File.readlines("test/functional/functional_test.rb").collect { |line| "    " + line } %>

@@ -1,4 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + '/test_helper')
+require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 
 class ValidatesFormatOfTest < Test::Unit::TestCase
   test "when attribute value does not match the given regex, then valid is false" do
