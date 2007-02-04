@@ -16,12 +16,14 @@ You may use, copy and redistribute this library under the same terms as Ruby its
 
 == Examples
 
-See the tests for more examples
-
 === Test Helper
 
 <%= File.readlines("test/test_helper.rb").collect { |line| "    " + line } %>
 
-=== Functional Tests
+=== Validations
 
-<%= File.readlines("test/functional/functional_test.rb").collect { |line| "    " + line } %>
+<%= File.readlines("test/functional/validates_presence_of_test.rb").collect { |line| "    " + line } %>
+
+<%= File.readlines("test/functional/validates_format_of_test.rb").collect { |line| "    " + line } %>
+
+See the tests for more examples

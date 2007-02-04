@@ -11,8 +11,8 @@ module Validatable
     # 
     # A regular expression must be provided or else an exception will be raised.
     def validates_format_of(*args)
-      validate_all(args) do |attribute, message, options|
-        self.validations << ValidatesFormatOf.new(attribute, options[:with], message || "is invalid")
+      validate_all(args) do |attribute, message, options, conditional|
+        self.validations << ValidatesFormatOf.new(attribute, options[:with], message || "is invalid", conditional)
       end
     end
     
@@ -31,8 +31,8 @@ module Validatable
     #     * minimum - The minimum size of the attribute
     #     * maximum - The maximum size of the attribute
     def validates_length_of(*args)
-      validate_all(args) do |attribute, message, options|
-        self.validations << ValidatesLengthOf.new(attribute, options[:minimum], options[:maximum], message || "is invalid")
+      validate_all(args) do |attribute, message, options, conditional|
+        self.validations << ValidatesLengthOf.new(attribute, options[:minimum], options[:maximum], message || "is invalid", conditional)
       end
     end
 
@@ -46,8 +46,8 @@ module Validatable
     #     validates_acceptance_of :eula, :message => "must be abided"
     #   end
     def validates_acceptance_of(*args)
-      validate_all(args) do |attribute, message, options|
-        self.validations << ValidatesAcceptanceOf.new(attribute, message || "must be accepted")
+      validate_all(args) do |attribute, message, options, conditional|
+        self.validations << ValidatesAcceptanceOf.new(attribute, message || "must be accepted", conditional)
       end
     end
 
@@ -66,8 +66,8 @@ module Validatable
     #     <%= password_field "person", "password" %>
     #     <%= password_field "person", "password_confirmation" %>
     def validates_confirmation_of(*args)
-      validate_all(args) do |attribute, message, options|
-        self.validations << ValidatesConfirmationOf.new(attribute, message || "doesn't match confirmation")
+      validate_all(args) do |attribute, message, options, conditional|
+        self.validations << ValidatesConfirmationOf.new(attribute, message || "doesn't match confirmation", conditional)
       end
     end
 
@@ -83,8 +83,8 @@ module Validatable
     #
     # The first_name attribute must be in the object and it cannot be nil or empty.
     def validates_presence_of(*args)
-      validate_all(args) do |attribute, message, options|
-        self.validations << ValidatesPresenceOf.new(attribute, message || "can't be empty")
+      validate_all(args) do |attribute, message, options, conditional|
+        self.validations << ValidatesPresenceOf.new(attribute, message || "can't be empty", conditional)
       end
     end
     
@@ -109,7 +109,7 @@ module Validatable
     
     def validate(instance) #:nodoc:
       self.validations.each do |validation|
-        instance.errors.add(validation.attribute, validation.message) unless validation.valid?(instance)
+        instance.errors.add(validation.attribute, validation.message) if validation.if?(instance) and !validation.valid?(instance)
       end
     end
     
@@ -127,7 +127,7 @@ module Validatable
     def validate_all(args, &block) #:nodoc:
       options = args.last.is_a?(Hash) ? args.pop : {}
       args.each do |attribute|
-        yield attribute, options[:message], options
+        yield attribute, options[:message], options, options[:if] || Proc.new { true }
       end
     end
     

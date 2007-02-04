@@ -1,9 +1,9 @@
 module Validatable
   class ValidatesFormatOf < ValidationBase #:nodoc:
     attr_accessor :regex
-    def initialize(attribute, regex, message)
+    def initialize(attribute, regex, message, conditional)
       self.regex = regex
-      super attribute, message
+      super attribute, message, conditional
     end
   
     def valid?(instance)
