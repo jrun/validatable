@@ -1,10 +1,9 @@
 module Validatable
   class ValidatesLengthOf < ValidationBase #:nodoc:
-    attr_accessor :attribute, :minimum, :maximum
-    def initialize(attribute, minimum, maximum, message, conditional)
-      self.minimum = minimum
-      self.maximum = maximum
-      super attribute, message, conditional
+    attr_accessor :minimum, :maximum
+    
+    def message
+      super || "is invalid"
     end
     
     def valid?(instance)

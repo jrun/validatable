@@ -11,8 +11,8 @@ module Validatable
     # 
     # A regular expression must be provided or else an exception will be raised.
     def validates_format_of(*args)
-      validate_all(args) do |attribute, message, options, conditional|
-        self.validations << ValidatesFormatOf.new(attribute, options[:with], message || "is invalid", conditional)
+      yield_validations(args, ValidatesFormatOf) do |validation, options|
+        validation.with = options[:with]
       end
     end
     
@@ -31,8 +31,9 @@ module Validatable
     #     * minimum - The minimum size of the attribute
     #     * maximum - The maximum size of the attribute
     def validates_length_of(*args)
-      validate_all(args) do |attribute, message, options, conditional|
-        self.validations << ValidatesLengthOf.new(attribute, options[:minimum], options[:maximum], message || "is invalid", conditional)
+      yield_validations(args, ValidatesLengthOf) do |validation, options|
+        validation.minimum = options[:minimum]
+        validation.maximum = options[:maximum]
       end
     end
 
@@ -46,6 +47,7 @@ module Validatable
     #     validates_acceptance_of :eula, :message => "must be abided"
     #   end
     def validates_acceptance_of(*args)
+      # yield_validations(args, ValidatesAcceptanceOf)
       validate_all(args) do |attribute, message, options, conditional|
         self.validations << ValidatesAcceptanceOf.new(attribute, message || "must be accepted", conditional)
       end
@@ -128,6 +130,15 @@ module Validatable
       options = args.last.is_a?(Hash) ? args.pop : {}
       args.each do |attribute|
         yield attribute, options[:message], options, options[:if] || Proc.new { true }
+      end
+    end
+    
+    def yield_validations(args, klass) 
+      options = args.last.is_a?(Hash) ? args.pop : {}
+      args.each do |attribute|
+        new_validation = klass.new(attribute, options[:message], options[:if])
+        yield new_validation, options
+        self.validations << new_validation
       end
     end
     

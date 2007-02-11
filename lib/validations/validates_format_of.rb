@@ -1,13 +1,13 @@
 module Validatable
   class ValidatesFormatOf < ValidationBase #:nodoc:
-    attr_accessor :regex
-    def initialize(attribute, regex, message, conditional)
-      self.regex = regex
-      super attribute, message, conditional
-    end
+    attr_accessor :with
   
     def valid?(instance)
-      instance.send(self.attribute) =~ self.regex && true
+      instance.send(self.attribute) =~ self.with && true
+    end
+    
+    def message
+      super || "is invalid"
     end
   end
 end

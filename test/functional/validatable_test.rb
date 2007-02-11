@@ -21,5 +21,17 @@ module Functional
       assert_equal "is invalid", instance.errors.on(:address)
       assert_equal "can't be empty", instance.errors.on(:name)
     end
+    
+    expect true do
+      klass = Class.new do
+        include Validatable
+        validates_presence_of :name, :attempts => 1
+        attr_accessor :name
+      end
+      instance = klass.new
+      instance.valid?
+      instance.valid?
+      true
+    end
   end
 end

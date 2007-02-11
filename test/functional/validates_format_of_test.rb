@@ -21,7 +21,7 @@ module Functional
       end
       assert_equal true, klass.new.valid?
     end
-
+    
     test "given invalid name format and a name, when validated, then error is in the objects error collection" do
       klass = Class.new do
         include Validatable

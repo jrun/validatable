@@ -3,7 +3,7 @@ module Validatable
     attr_accessor :attribute, :message
     
     def initialize(attribute, message, conditional)
-      @attribute, @message, @conditional = attribute, message, conditional
+      @attribute, @message, @conditional = attribute, message, conditional|| Proc.new { true }
     end
     
     def if?(instance)
