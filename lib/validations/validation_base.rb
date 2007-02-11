@@ -5,7 +5,7 @@ module Validatable
     def initialize(attribute, options={})
       @attribute = attribute
       @message = options[:message]
-      @conditional = options[:conditional] || Proc.new { true }
+      @conditional = options[:if] || Proc.new { true }
       @times = options[:times]
     end
     
