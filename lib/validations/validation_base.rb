@@ -2,16 +2,12 @@ module Validatable
   class ValidationBase #:nodoc:
     attr_accessor :attribute, :message
     
-    def initialize(attribute, message, conditional)
-      @attribute, @message, @conditional = attribute, message, conditional|| Proc.new { true }
+    def initialize(attribute, message=nil, conditional=nil, times=nil)
+      @attribute, @message, @conditional, @times = attribute, message, conditional|| Proc.new { true }, times
     end
     
-    def if?(instance)
+    def should_validate?(instance)
       instance.instance_eval(&@conditional)
-    end
-    
-    def invalid?
-      not valid?
     end
   end
 end

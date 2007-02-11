@@ -11,7 +11,7 @@ module Validatable
     # 
     # A regular expression must be provided or else an exception will be raised.
     def validates_format_of(*args)
-      yield_validations(args, ValidatesFormatOf) do |validation, options|
+      add_validations(args, ValidatesFormatOf) do |validation, options|
         validation.with = options[:with]
       end
     end
@@ -31,7 +31,7 @@ module Validatable
     #     * minimum - The minimum size of the attribute
     #     * maximum - The maximum size of the attribute
     def validates_length_of(*args)
-      yield_validations(args, ValidatesLengthOf) do |validation, options|
+      add_validations(args, ValidatesLengthOf) do |validation, options|
         validation.minimum = options[:minimum]
         validation.maximum = options[:maximum]
       end
@@ -47,10 +47,7 @@ module Validatable
     #     validates_acceptance_of :eula, :message => "must be abided"
     #   end
     def validates_acceptance_of(*args)
-      # yield_validations(args, ValidatesAcceptanceOf)
-      validate_all(args) do |attribute, message, options, conditional|
-        self.validations << ValidatesAcceptanceOf.new(attribute, message || "must be accepted", conditional)
-      end
+      add_validations(args, ValidatesAcceptanceOf)
     end
 
     # call-seq: validates_confirmation_of(*args)
@@ -68,11 +65,8 @@ module Validatable
     #     <%= password_field "person", "password" %>
     #     <%= password_field "person", "password_confirmation" %>
     def validates_confirmation_of(*args)
-      validate_all(args) do |attribute, message, options, conditional|
-        self.validations << ValidatesConfirmationOf.new(attribute, message || "doesn't match confirmation", conditional)
-      end
+      add_validations(args, ValidatesConfirmationOf)
     end
-
   
     # call-seq: validates_presence_of(*args)
     # 
@@ -85,9 +79,7 @@ module Validatable
     #
     # The first_name attribute must be in the object and it cannot be nil or empty.
     def validates_presence_of(*args)
-      validate_all(args) do |attribute, message, options, conditional|
-        self.validations << ValidatesPresenceOf.new(attribute, message || "can't be empty", conditional)
-      end
+      add_validations(args, ValidatesPresenceOf)
     end
     
     # call-seq: include_validations_for(*args)
@@ -111,7 +103,9 @@ module Validatable
     
     def validate(instance) #:nodoc:
       self.validations.each do |validation|
-        instance.errors.add(validation.attribute, validation.message) if validation.if?(instance) and !validation.valid?(instance)
+        if validation.should_validate?(instance)
+          instance.errors.add(validation.attribute, validation.message) unless validation.valid?(instance)
+        end
       end
     end
     
@@ -126,18 +120,11 @@ module Validatable
     end
 
     protected
-    def validate_all(args, &block) #:nodoc:
+    def add_validations(args, klass) #:nodoc:
       options = args.last.is_a?(Hash) ? args.pop : {}
       args.each do |attribute|
-        yield attribute, options[:message], options, options[:if] || Proc.new { true }
-      end
-    end
-    
-    def yield_validations(args, klass) 
-      options = args.last.is_a?(Hash) ? args.pop : {}
-      args.each do |attribute|
-        new_validation = klass.new(attribute, options[:message], options[:if])
-        yield new_validation, options
+        new_validation = klass.new(attribute, options[:message], options[:if], options[:times])
+        yield new_validation, options if block_given?
         self.validations << new_validation
       end
     end

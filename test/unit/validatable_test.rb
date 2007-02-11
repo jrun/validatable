@@ -3,7 +3,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 module Unit
   class ValidatableTest < Test::Unit::TestCase
     test "given a validation that returns false when object is validated then valid returns false" do
-      validation = stub(:valid? => false, :if? => true, :attribute => "attribute", :message => "message")
+      validation = stub(:valid? => false, :should_validate? => true, :attribute => "attribute", :message => "message")
       klass = Class.new do
         include Validatable
         validations << validation
@@ -23,8 +23,8 @@ module Unit
       klass = Class.new do
         include Validatable
       end
-      klass.send(:validations) << stub(:valid? => false, :if? => true, :attribute => 'attribute', :message => 'message')
-      klass.send(:validations) << stub(:valid? => false, :if? => true, :attribute => 'attribute2', :message => 'message2')
+      klass.send(:validations) << stub(:valid? => false, :should_validate? => true, :attribute => 'attribute', :message => 'message')
+      klass.send(:validations) << stub(:valid? => false, :should_validate? => true, :attribute => 'attribute2', :message => 'message2')
       instance=mock
       instance.expects(:errors).returns(errors=mock).times 2
       errors.expects(:add).with('attribute', 'message')

@@ -25,7 +25,7 @@ module Functional
     expect true do
       klass = Class.new do
         include Validatable
-        validates_presence_of :name, :attempts => 1
+        validates_presence_of :name, :times => 1
         attr_accessor :name
       end
       instance = klass.new
