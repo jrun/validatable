@@ -16,14 +16,61 @@ You may use, copy and redistribute this library under the same terms as Ruby its
 
 == Examples
 
-=== Test Helper
+Validation of an entire hierarchy of objects with errors aggregated at the root object.
 
-<%= File.readlines("test/test_helper.rb").collect { |line| "    " + line } %>
+	class Person
+	  include Validatable
+	  validates_presence_of :name
+	  attr_accessor :name
+	end
 
-=== Validations
+	class PersonPresenter
+	  include Validatable
+	  include_validations_for :person
+	  attr_accessor :person
+  
+	  def initialize(person)
+	    @person = person
+	  end
+	end
 
-<%= File.readlines("test/functional/validates_presence_of_test.rb").collect { |line| "    " + line } %>
+	presenter = PersonPresenter.new(Person.new)
+	presenter.valid? #=> false
+	presenter.errors.on(:name) #=> "can't be blank"
 
-<%= File.readlines("test/functional/validates_format_of_test.rb").collect { |line| "    " + line } %>
+Validations that turn off after X times of failed attempts.
+
+	class Person
+	  include Validatable
+	  validates_presence_of :name, :times => 1
+	  attr_accessor :name
+	end
+
+	person = Person.new
+	person.valid? #=> false
+	person.valid? #=> true
+
+Validations can be given levels. If a validation fails on a level the validations for subsequent levels will not be executed.
+
+	class Person
+	  include Validatable
+	  validates_presence_of :name, :level => 1, :message => "name message"
+	  validates_presence_of :address, :level => 2
+	  attr_accessor :name, :address
+	end
+
+	person = Person.new
+	person.valid? #=> false
+	person.errors.on(:name) #=> "name message"
+	person.errors.on(:address) #=> nil
+
+Similar to Rails, Validatable also supports conditional validation.
+
+	class Person
+	  include Validatable
+	  attr_accessor :name
+	  validates_format_of :name, :with => /.+/, :if => Proc.new { !name.nil? }
+	end
+	Person.new.valid? #=> true
 
 See the tests for more examples

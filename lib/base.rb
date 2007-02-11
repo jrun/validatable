@@ -10,6 +10,14 @@ module Validatable
     #   end
     # 
     # A regular expression must be provided or else an exception will be raised.
+    # 
+    # Configuration options:
+    # 
+    #     * message - The message to add to the errors collection when the validation fails
+    #     * times - The number of times the validation applies
+    #     * level - The level at which the validation should occur
+    #     * if - A block that when executed must return true of the validation will not occur
+    #     * with - The regular expression used to validate the format
     def validates_format_of(*args)
       add_validations(args, ValidatesFormatOf) do |validation, options|
         validation.with = options[:with]
@@ -28,6 +36,10 @@ module Validatable
     # 
     # Configuration options:
     # 
+    #     * message - The message to add to the errors collection when the validation fails
+    #     * times - The number of times the validation applies
+    #     * level - The level at which the validation should occur
+    #     * if - A block that when executed must return true of the validation will not occur
     #     * minimum - The minimum size of the attribute
     #     * maximum - The maximum size of the attribute
     def validates_length_of(*args)
@@ -46,6 +58,13 @@ module Validatable
     #     validates_acceptance_of :terms_of_service
     #     validates_acceptance_of :eula, :message => "must be abided"
     #   end
+    #
+    # Configuration options:
+    # 
+    #     * message - The message to add to the errors collection when the validation fails
+    #     * times - The number of times the validation applies
+    #     * level - The level at which the validation should occur
+    #     * if - A block that when executed must return true of the validation will not occur
     def validates_acceptance_of(*args)
       add_validations(args, ValidatesAcceptanceOf)
     end
@@ -64,6 +83,13 @@ module Validatable
     #   View:
     #     <%= password_field "person", "password" %>
     #     <%= password_field "person", "password_confirmation" %>
+    #
+    # Configuration options:
+    # 
+    #     * message - The message to add to the errors collection when the validation fails
+    #     * times - The number of times the validation applies
+    #     * level - The level at which the validation should occur
+    #     * if - A block that when executed must return true of the validation will not occur
     def validates_confirmation_of(*args)
       add_validations(args, ValidatesConfirmationOf)
     end
@@ -78,6 +104,13 @@ module Validatable
     #   end
     #
     # The first_name attribute must be in the object and it cannot be nil or empty.
+    #
+    # Configuration options:
+    # 
+    #     * message - The message to add to the errors collection when the validation fails
+    #     * times - The number of times the validation applies
+    #     * level - The level at which the validation should occur
+    #     * if - A block that when executed must return true of the validation will not occur
     def validates_presence_of(*args)
       add_validations(args, ValidatesPresenceOf)
     end
@@ -85,6 +118,11 @@ module Validatable
     # call-seq: include_validations_for(*args)
     # 
     # Validates the specified attributes.
+    #   class Person
+    #     include Validatable
+    #     validates_presence_of :name
+    #     attr_accessor :name
+    #   end
     # 
     #   class PersonPresenter
     #     include Validatable
@@ -95,6 +133,10 @@ module Validatable
     #       @person = person
     #     end
     #   end
+    #   
+    #   presenter = PersonPresenter.new(Person.new)
+    #   presenter.valid? #=> false
+    #   presenter.errors.on(:name) #=> "can't be blank"
     #
     # The person attribute will be validated.  If person is invalid the errors will be added to the PersonPresenter errors collection.
     def include_validations_for(*args)
