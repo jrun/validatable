@@ -7,7 +7,7 @@ class ValidationBaseTest < Test::Unit::TestCase
   end
   
   expect true do
-    validation = Validatable::ValidationBase.new :base, nil, nil, 1
+    validation = Validatable::ValidationBase.new :base, :times => 1
     validation.validate_this_time?
   end
   
@@ -17,13 +17,13 @@ class ValidationBaseTest < Test::Unit::TestCase
   end
   
   expect true do
-    validation = Validatable::ValidationBase.new :base, nil, nil, 2
+    validation = Validatable::ValidationBase.new :base, :times => 2
     validation.validate_this_time?
     validation.validate_this_time?
   end
 
   expect false do
-    validation = Validatable::ValidationBase.new :base, nil, nil, 1
+    validation = Validatable::ValidationBase.new :base, :times => 1
     validation.validate_this_time?
     validation.validate_this_time?
   end
