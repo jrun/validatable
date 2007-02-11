@@ -31,7 +31,6 @@ module Functional
       instance = klass.new
       instance.valid?
       instance.valid?
-      true
     end
   end
 end
