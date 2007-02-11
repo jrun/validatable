@@ -1,0 +1,94 @@
+= Validatable
+
+Validatable is a library for adding validations.
+
+by Jay[http://jayfields.blogspot.com] Fields[http://jayfields.blogspot.com]
+
+== Download and Installation
+
+You can download Validatable from here[http://rubyforge.org/projects/validatable] or install it with the following command.
+
+ $ gem install validatable
+
+== License
+ 	
+You may use, copy and redistribute this library under the same terms as Ruby itself (see http://www.ruby-lang.org/en/LICENSE.txt).
+
+== Examples
+
+=== Test Helper
+
+    require 'test/unit'
+    require 'rubygems'
+    require 'mocha'
+    require File.dirname(__FILE__) + '/../lib/validatable'
+    
+    class << Test::Unit::TestCase
+      def test(name, &block)
+        test_name = :"test_#{name.gsub(' ','_')}"
+        raise ArgumentError, "#{test_name} is already defined" if self.instance_methods.include? test_name.to_s
+        define_method test_name, &block
+      end
+      
+      def expect(expected_value, &block)
+        define_method :"test_#{caller.first.split("/").last}" do
+          assert_equal expected_value, instance_eval(&block)
+        end 
+      end
+    end
+
+=== Validations
+
+    require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
+    
+    module Functional
+      class ValidatesPresenceOfTest < Test::Unit::TestCase
+        test "given no name, when validated, then error is in the objects error collection" do
+          klass = Class.new do
+            include Validatable
+            attr_accessor :name
+            validates_presence_of :name
+          end
+          instance = klass.new
+          instance.valid?
+          assert_equal "can't be empty", instance.errors.on(:name)
+        end
+      end
+    end
+
+    require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
+    
+    module Functional
+      class ValidatesFormatOfTest < Test::Unit::TestCase
+        test "given invalid name format, when validated, then error is in the objects error collection" do
+          klass = Class.new do
+            include Validatable
+            attr_accessor :name
+            validates_format_of :name, :with => /.+/
+          end
+          instance = klass.new
+          instance.valid?
+          assert_equal "is invalid", instance.errors.on(:name)
+        end
+    
+        test "given invalid name format and nil name, when validated, then error is in the objects error collection" do
+          klass = Class.new do
+            include Validatable
+            attr_accessor :name
+            validates_format_of :name, :with => /.+/, :if => Proc.new { !name.nil? }
+          end
+          assert_equal true, klass.new.valid?
+        end
+        
+        test "given invalid name format and a name, when validated, then error is in the objects error collection" do
+          klass = Class.new do
+            include Validatable
+            attr_accessor :name
+            validates_format_of :name, :with => /.+/, :if => Proc.new { name.nil? }
+          end
+          assert_equal false, klass.new.valid?
+        end
+      end
+    end
+
+See the tests for more examples
