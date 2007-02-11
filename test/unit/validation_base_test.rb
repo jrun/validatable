@@ -27,4 +27,9 @@ class ValidationBaseTest < Test::Unit::TestCase
     validation.validate_this_time?
     validation.validate_this_time?
   end
+  
+  expect 1 do
+    validation = Validatable::ValidationBase.new :base
+    validation.level
+  end
 end

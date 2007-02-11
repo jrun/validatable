@@ -32,5 +32,29 @@ module Functional
       instance.valid?
       instance.valid?
     end
+    
+    expect "name message" do
+      klass = Class.new do
+        include Validatable
+        validates_presence_of :name, :level => 1, :message => "name message"
+        validates_presence_of :address, :level => 2
+        attr_accessor :name, :address
+      end
+      instance = klass.new
+      instance.valid?
+      instance.errors.on(:name)
+    end
+    
+    expect nil do
+      klass = Class.new do
+        include Validatable
+        validates_presence_of :name, :level => 1, :message => "name message"
+        validates_presence_of :address, :level => 2
+        attr_accessor :name, :address
+      end
+      instance = klass.new
+      instance.valid?
+      instance.errors.on(:address)
+    end
   end
 end

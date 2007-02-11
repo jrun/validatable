@@ -102,10 +102,14 @@ module Validatable
     end
     
     def validate(instance) #:nodoc:
-      self.validations.each do |validation|
-        if validation.should_validate?(instance)
-          instance.errors.add(validation.attribute, validation.message) unless validation.valid?(instance)
+      levels = self.validations.collect { |validation| validation.level }.uniq
+      levels.sort.each do |level|
+        self.validations.select { |validation| validation.level == level }.each do |validation|
+          if validation.should_validate?(instance)
+            instance.errors.add(validation.attribute, validation.message) unless validation.valid?(instance)
+          end
         end
+        return unless instance.errors.empty?
       end
     end
     
