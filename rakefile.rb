@@ -29,7 +29,7 @@ Gem::manage_gems
 specification = Gem::Specification.new do |s|
 	s.name   = "validatable"
   s.summary = "Validatable is a library for adding validations."
-	s.version = "1.1.0"
+	s.version = "1.1.1"
 	s.author = 'Jay Fields'
 	s.description = "Validatable is a library for adding validations."
 	s.email = 'validatable-developer@rubyforge.org'
