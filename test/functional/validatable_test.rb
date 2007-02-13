@@ -33,6 +33,18 @@ module Functional
       instance.valid?
     end
     
+    expect false do
+      klass = Class.new do
+        include Validatable
+        validates_presence_of :name, :times => 1
+        attr_accessor :name
+      end
+      instance1 = klass.new
+      instance1.valid?
+      instance2 = klass.new
+      instance2.valid?
+    end
+    
     expect "name message" do
       klass = Class.new do
         include Validatable

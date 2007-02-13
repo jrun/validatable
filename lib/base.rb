@@ -165,6 +165,10 @@ module Validatable
       end
     end
 
+    def validations #:nodoc:
+      @validations ||= []
+    end
+
     protected
     def add_validations(args, klass) #:nodoc:
       options = args.last.is_a?(Hash) ? args.pop : {}
@@ -178,10 +182,6 @@ module Validatable
     def children_to_validate #:nodoc:
       @children_to_validate ||= []
     end
-    
-    def validations #:nodoc:
-      @validations ||= []
-    end
   end
   
   def self.included(klass) #:nodoc:
@@ -193,8 +193,8 @@ module Validatable
   # Returns true if no errors were added otherwise false.
   def valid?
     errors.clear
-    self.class.validate(self)
     self.class.validate_children(self)
+    self.validate
     errors.empty?
   end
   
@@ -203,5 +203,29 @@ module Validatable
   # Returns the Errors object that holds all information about attribute error messages.
   def errors
     @errors ||= Validatable::Errors.new
+  end
+  
+  protected
+  def validate #:nodoc:
+    validation_levels.sort.each do |level|
+      validations_for_level(level).each do |validation|
+        if validation.should_validate?(self)
+          self.errors.add(validation.attribute, validation.message) unless validation.valid?(self)
+        end
+      end
+      return unless self.errors.empty?
+    end
+  end
+  
+  def validation_levels #:nodoc:
+    self.validations.collect { |validation| validation.level }.uniq
+  end
+  
+  def validations_for_level(level) #:nodoc:
+    self.validations.select { |validation| validation.level == level }
+  end
+  
+  def validations #:nodoc:
+    @validations ||= self.class.validations.collect { |validation| validation.dup }
   end
 end
