@@ -10,4 +10,10 @@ class ValidatesPresenceOfTest < Test::Unit::TestCase
     validation = Validatable::ValidatesPresenceOf.new :name
     assert_equal true, validation.valid?(stub(:name=>"book"))
   end
+  
+  test "when given a true value which is not a String, then valid is true" do 
+    validation = Validatable::ValidatesPresenceOf.new :employee
+    assert_equal true, validation.valid?(stub(:employee => stub(:nil? => false)))
+  end
+  
 end

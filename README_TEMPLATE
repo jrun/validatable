@@ -74,3 +74,6 @@ Similar to Rails, Validatable also supports conditional validation.
 	Person.new.valid? #=> true
 
 See the tests for more examples
+
+== Contributors
+Rick Bradley (Revision 25)
