@@ -22,6 +22,48 @@ module Functional
       assert_equal "can't be empty", instance.errors.on(:name)
     end
     
+    test "nonmatching groups are not used as validations" do
+      klass = Class.new do
+        include Validatable
+        validates_presence_of :name, :group => :group_one
+        attr_accessor :name
+      end
+      instance = klass.new
+      assert_equal true, instance.valid?(:group_two)
+    end
+    
+    test "matching groups are used as validations" do
+      klass = Class.new do
+        include Validatable
+        validates_presence_of :name, :group => :group_one
+        attr_accessor :name
+      end
+      instance = klass.new
+      assert_equal false, instance.valid?(:group_one)
+    end
+    
+    test "no group given then all validations are used" do
+      klass = Class.new do
+        include Validatable
+        validates_presence_of :name, :group => :group_one
+        attr_accessor :name
+      end
+      instance = klass.new
+      assert_equal false, instance.valid?
+    end
+    
+    test "matching multiple groups for validations" do
+      klass = Class.new do
+        include Validatable
+        validates_presence_of :name, :group => :group_one
+        validates_presence_of :address, :group => :group_two
+        attr_accessor :name, :address
+      end
+      instance = klass.new
+      instance.valid?(:group_one, :group_two)
+      assert_equal 2, instance.errors.size
+    end
+    
     expect true do
       klass = Class.new do
         include Validatable

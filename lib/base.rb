@@ -155,10 +155,10 @@ module Validatable
       end
     end
     
-    def validate_children(instance) #:nodoc:
+    def validate_children(instance, groups) #:nodoc:
       self.children_to_validate.each do |child_name|
         child = instance.send child_name
-        child.valid?
+        child.valid?(*groups)
         child.errors.each do |attribute, message|
           instance.errors.add(attribute, message)
         end
@@ -191,10 +191,10 @@ module Validatable
   # call-seq: valid?
   #
   # Returns true if no errors were added otherwise false.
-  def valid?
+  def valid?(*groups)
     errors.clear
-    self.class.validate_children(self)
-    self.validate
+    self.class.validate_children(self, groups)
+    self.validate(groups)
     errors.empty?
   end
   
@@ -206,14 +206,16 @@ module Validatable
   end
   
   protected
-  def validate #:nodoc:
-    validation_levels.sort.each do |level|
-      validations_for_level(level).each do |validation|
-        if validation.should_validate?(self)
-          self.errors.add(validation.attribute, validation.message) unless validation.valid?(self)
+  def validate(groups) #:nodoc:
+    validations_for_groups(groups).each do |validation|
+      validation_levels.sort.each do |level|
+        validations_for_level(level).each do |validation|
+          if validation.should_validate?(self)
+            self.errors.add(validation.attribute, validation.message) unless validation.valid?(self)
+          end
         end
+        return unless self.errors.empty?
       end
-      return unless self.errors.empty?
     end
   end
   
@@ -223,6 +225,11 @@ module Validatable
   
   def validations_for_level(level) #:nodoc:
     self.validations.select { |validation| validation.level == level }
+  end
+  
+  def validations_for_groups(groups) #:nodoc:
+    return self.validations if groups.empty?
+    self.validations.select { |validation| groups.include?(validation.group) }
   end
   
   def validations #:nodoc:
