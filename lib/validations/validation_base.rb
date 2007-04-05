@@ -1,7 +1,7 @@
 module Validatable
   class ValidationBase #:nodoc:
     attr_accessor :attribute, :message
-    attr_reader :level, :group
+    attr_reader :level, :groups
     
     def initialize(attribute, options={})
       @attribute = attribute
@@ -9,7 +9,7 @@ module Validatable
       @conditional = options[:if] || Proc.new { true }
       @times = options[:times]
       @level = options[:level] || 1
-      @group = options[:group]
+      @groups = options[:groups].is_a?(Array) ? options[:groups] : [options[:groups]]
     end
     
     def should_validate?(instance)

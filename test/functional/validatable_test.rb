@@ -25,17 +25,27 @@ module Functional
     test "nonmatching groups are not used as validations" do
       klass = Class.new do
         include Validatable
-        validates_presence_of :name, :group => :group_one
+        validates_presence_of :name, :groups => :group_one
         attr_accessor :name
       end
       instance = klass.new
       assert_equal true, instance.valid?(:group_two)
     end
     
-    test "matching groups are used as validations" do
+    test "matching groups are used as validations when multiple groups are given to valid" do
       klass = Class.new do
         include Validatable
-        validates_presence_of :name, :group => :group_one
+        validates_presence_of :name, :groups => :group_one
+        attr_accessor :name
+      end
+      instance = klass.new
+      assert_equal false, instance.valid?(:group_one)
+    end
+    
+    test "matching groups are used as validations when validations are part of multiple groups" do
+      klass = Class.new do
+        include Validatable
+        validates_presence_of :name, :groups => [:group_one, :group_two]
         attr_accessor :name
       end
       instance = klass.new
@@ -45,7 +55,7 @@ module Functional
     test "no group given then all validations are used" do
       klass = Class.new do
         include Validatable
-        validates_presence_of :name, :group => :group_one
+        validates_presence_of :name, :groups => :group_one
         attr_accessor :name
       end
       instance = klass.new
@@ -55,8 +65,8 @@ module Functional
     test "matching multiple groups for validations" do
       klass = Class.new do
         include Validatable
-        validates_presence_of :name, :group => :group_one
-        validates_presence_of :address, :group => :group_two
+        validates_presence_of :name, :groups => :group_one
+        validates_presence_of :address, :groups => :group_two
         attr_accessor :name, :address
       end
       instance = klass.new

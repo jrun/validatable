@@ -229,7 +229,7 @@ module Validatable
   
   def validations_for_groups(groups) #:nodoc:
     return self.validations if groups.empty?
-    self.validations.select { |validation| groups.include?(validation.group) }
+    self.validations.select { |validation|  (groups & validation.groups).any? }
   end
   
   def validations #:nodoc:
