@@ -18,6 +18,7 @@ module Validatable
     #     * level - The level at which the validation should occur
     #     * if - A block that when executed must return true of the validation will not occur
     #     * with - The regular expression used to validate the format
+    #     * group - The group that this validation belongs to.  A validation can belong to multiple groups
     def validates_format_of(*args)
       add_validations(args, ValidatesFormatOf) do |validation, options|
         validation.with = options[:with]
@@ -42,6 +43,7 @@ module Validatable
     #     * if - A block that when executed must return true of the validation will not occur
     #     * minimum - The minimum size of the attribute
     #     * maximum - The maximum size of the attribute
+    #     * group - The group that this validation belongs to.  A validation can belong to multiple groups
     def validates_length_of(*args)
       add_validations(args, ValidatesLengthOf) do |validation, options|
         validation.minimum = options[:minimum]
@@ -65,6 +67,7 @@ module Validatable
     #     * times - The number of times the validation applies
     #     * level - The level at which the validation should occur
     #     * if - A block that when executed must return true of the validation will not occur
+    #     * group - The group that this validation belongs to.  A validation can belong to multiple groups
     def validates_acceptance_of(*args)
       add_validations(args, ValidatesAcceptanceOf)
     end
@@ -90,6 +93,7 @@ module Validatable
     #     * times - The number of times the validation applies
     #     * level - The level at which the validation should occur
     #     * if - A block that when executed must return true of the validation will not occur
+    #     * group - The group that this validation belongs to.  A validation can belong to multiple groups
     def validates_confirmation_of(*args)
       add_validations(args, ValidatesConfirmationOf)
     end
@@ -111,6 +115,7 @@ module Validatable
     #     * times - The number of times the validation applies
     #     * level - The level at which the validation should occur
     #     * if - A block that when executed must return true of the validation will not occur
+    #     * group - The group that this validation belongs to.  A validation can belong to multiple groups
     def validates_presence_of(*args)
       add_validations(args, ValidatesPresenceOf)
     end
