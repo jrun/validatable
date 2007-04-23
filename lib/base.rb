@@ -95,7 +95,13 @@ module Validatable
     #     * if - A block that when executed must return true of the validation will not occur
     #     * group - The group that this validation belongs to.  A validation can belong to multiple groups
     def validates_confirmation_of(*args)
-      add_validations(args, ValidatesConfirmationOf)
+      add_validations(args, ValidatesConfirmationOf) do |validation, options|
+        validation.case_sensitive = if options.has_key? :case_sensitive
+          options[:case_sensitive]
+        else
+          true
+        end
+      end
     end
   
     # call-seq: validates_presence_of(*args)
