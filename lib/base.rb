@@ -120,6 +120,31 @@ module Validatable
       add_validations(args, ValidatesPresenceOf)
     end
     
+    # call-seq: validates_true_for(*args)
+    # 
+    # Validates that the logic evaluates to true
+    # 
+    #   class Person
+    #     include Validatable
+    #     validates_true_for :first_name, :logic => lambda { first_name == 'Jamie' }
+    #   end
+    #
+    # The logic option is required.
+    #
+    # Configuration options:
+    # 
+    #     * message - The message to add to the errors collection when the validation fails
+    #     * times - The number of times the validation applies
+    #     * level - The level at which the validation should occur
+    #     * if - A block that when executed must return true of the validation will not occur
+    #     * group - The group that this validation belongs to.  A validation can belong to multiple groups
+    #     * logic - A block that executes to perform the validation
+    def validates_true_for(*args)
+      add_validations(args, ValidatesTrueFor) do |validation, options|
+        validation.logic = options[:logic]
+      end
+    end
+    
     # call-seq: include_validations_for(*args)
     # 
     # Validates the specified attributes.
