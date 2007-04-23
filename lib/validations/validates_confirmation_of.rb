@@ -3,8 +3,8 @@ module Validatable
     attr_accessor :case_sensitive
     
     def valid?(instance)
-      result = Regexp.new(instance.send(self.attribute), !case_sensitive) =~ instance.send("#{self.attribute}_confirmation".to_sym)
-      result.nil? ? false : true
+      return instance.send(self.attribute) == instance.send("#{self.attribute}_confirmation".to_sym) if case_sensitive
+      instance.send(self.attribute).to_s.casecmp(instance.send("#{self.attribute}_confirmation".to_sym)) == 0
     end
     
     def message

@@ -26,4 +26,22 @@ class ValidatesConfirmationOfTest < Test::Unit::TestCase
     instance = stub(:username=>"username", :username_confirmation=>"USERNAME")
     assert_equal false, validation.valid?(instance)
   end
+  
+  test "invalid confirmation if value is nil and confirmation is not" do
+    validation = Validatable::ValidatesConfirmationOf.new :username
+    validation.case_sensitive = true
+    assert_equal false, validation.valid?(stub(:username => nil, :username_confirmation => 'something'))
+  end
+
+  test "invalid confirmation if confirmation is nil and value is not" do
+    validation = Validatable::ValidatesConfirmationOf.new :username
+    validation.case_sensitive = true
+    assert_equal false, validation.valid?(stub(:username => nil, :username_confirmation => 'something'))
+  end
+
+  test "valid confirmation if value and confirmation are nil" do
+    validation = Validatable::ValidatesConfirmationOf.new :username
+    validation.case_sensitive = true
+    assert_equal false, validation.valid?(stub(:username => nil, :username_confirmation => 'something'))
+  end
 end
