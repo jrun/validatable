@@ -2,7 +2,7 @@ module Validatable
   class Errors
     extend Forwardable
     
-    def_delegators :errors, :empty?, :clear, :each, :size, :length
+    def_delegators :errors, :empty?, :clear, :each, :each_pair, :size, :length
     
     # call-seq: on(attribute)
     # 
