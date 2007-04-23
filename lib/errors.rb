@@ -2,7 +2,7 @@ module Validatable
   class Errors
     extend Forwardable
     
-    def_delegators :errors, :empty?, :clear, :each, :each_pair, :size, :length
+    def_delegators :errors, :empty?, :clear, :each, :each_pair, :merge, :size, :length
     
     # call-seq: on(attribute)
     # 
@@ -14,6 +14,11 @@ module Validatable
     
     def add(attribute, message) #:nodoc:
       errors[attribute.to_sym] = message
+    end
+    
+    def merge!(errors) #:nodoc:
+      errors.each_pair{|k, v| add(k,v)}
+      self
     end
 
     def errors #:nodoc:
