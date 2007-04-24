@@ -176,7 +176,7 @@ module Validatable
     #
     # The person attribute will be validated.  If person is invalid the errors will be added to the PersonPresenter errors collection.
     def include_validations_for(attribute_to_validate, options = {})
-      children_to_validate << ChildValidation.new(attribute_to_validate, options[:map] || {})
+      children_to_validate << ChildValidation.new(attribute_to_validate, options[:map] || {}, options[:if] || lambda { true })
     end
     
     def validate(instance) #:nodoc:
@@ -193,6 +193,7 @@ module Validatable
     
     def validate_children(instance, groups) #:nodoc:
       self.children_to_validate.each do |child_validation|
+        next unless child_validation.should_validate?(instance)
         child = instance.send child_validation.attribute
         child.valid?(*groups)
         child.errors.each do |attribute, message|

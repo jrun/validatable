@@ -40,6 +40,41 @@ module Functional
       assert_equal "can't be empty", instance.errors.on(:namen)
     end
     
+    test "given a child class with validations, the error is in the parent objects error collection when the 'if' evals to true" do
+      child_class = Class.new do
+        include Validatable
+        attr_accessor :name, :address
+        validates_presence_of :name
+      end
+      klass = Class.new do
+        include Validatable
+        include_validations_for :child, :if => lambda { true }
+        define_method :child do
+          child_class.new
+        end
+      end
+      instance = klass.new
+      instance.valid?
+      assert_equal "can't be empty", instance.errors.on(:name)
+    end
+    
+    test "given a child class with validations, the error is not in the parent objects error collection when the if evals to false" do
+      child_class = Class.new do
+        include Validatable
+        attr_accessor :name, :address
+        validates_presence_of :name
+      end
+      klass = Class.new do
+        include Validatable
+        include_validations_for :child, :if => lambda { false }
+        define_method :child do
+          child_class.new
+        end
+      end
+      instance = klass.new
+      assert_equal true, instance.valid?
+    end
+    
     test "nonmatching groups are not used as validations" do
       klass = Class.new do
         include Validatable
