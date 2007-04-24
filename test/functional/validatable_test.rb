@@ -22,6 +22,24 @@ module Functional
       assert_equal "can't be empty", instance.errors.on(:name)
     end
     
+    test "given a child class with validations, the error is in the parent objects error collection as the mapped attribute" do
+      child_class = Class.new do
+        include Validatable
+        attr_accessor :name, :address
+        validates_presence_of :name
+      end
+      klass = Class.new do
+        include Validatable
+        include_validations_for :child, :map => {:name => :namen}
+        define_method :child do
+          child_class.new
+        end
+      end
+      instance = klass.new
+      instance.valid?
+      assert_equal "can't be empty", instance.errors.on(:namen)
+    end
+    
     test "nonmatching groups are not used as validations" do
       klass = Class.new do
         include Validatable

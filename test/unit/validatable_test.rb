@@ -11,14 +11,6 @@ module Unit
       klass.new.valid?
     end
   
-    expect [:anything, :else] do
-      klass = Class.new do
-        include Validatable
-        include_validations_for :anything, :else
-      end
-      klass.send(:children_to_validate)
-    end
-  
     test "when validate is executed, then messages are added for each validation that fails" do
       klass = Class.new do
         include Validatable

@@ -175,8 +175,8 @@ module Validatable
     #   presenter.errors.on(:name) #=> "can't be blank"
     #
     # The person attribute will be validated.  If person is invalid the errors will be added to the PersonPresenter errors collection.
-    def include_validations_for(*args)
-      children_to_validate.concat args
+    def include_validations_for(attribute_to_validate, options = {})
+      children_to_validate << ChildValidation.new(attribute_to_validate, options[:map] || {})
     end
     
     def validate(instance) #:nodoc:
@@ -192,11 +192,11 @@ module Validatable
     end
     
     def validate_children(instance, groups) #:nodoc:
-      self.children_to_validate.each do |child_name|
-        child = instance.send child_name
+      self.children_to_validate.each do |child_validation|
+        child = instance.send child_validation.attribute
         child.valid?(*groups)
         child.errors.each do |attribute, message|
-          instance.errors.add(attribute, message)
+          instance.errors.add(child_validation.map[attribute.to_sym] || attribute, message)
         end
       end
     end
