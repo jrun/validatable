@@ -23,20 +23,23 @@ module Validatable
     end
     
     def run_after_validate(result, instance, attribute)
-      self.class.after_validations.each do |block|
+      self.class.all_after_validations.each do |block|
         block.call result, instance, attribute
       end
     end
     
     class << self
-      attr_writer :after_validations
-
       def after_validate(&block)
         after_validations << block
       end
       
       def after_validations
         @after_validations ||= []
+      end
+      
+      def all_after_validations
+        return after_validations + self.superclass.after_validations if self.superclass.respond_to? :after_validations
+        after_validations
       end
     end
   end

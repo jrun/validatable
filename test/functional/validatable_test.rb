@@ -92,18 +92,21 @@ module Functional
         attr_accessor :name
       end
       
-      Validatable::ValidatesPresenceOf.class_eval do
+      Validatable::ValidationBase.class_eval do
         after_validate do |result, instance, attribute|
-          instance.errors.add(attribute, "changed message")
+          instance.errors.add(attribute, instance.errors.on(attribute) + " changed message")
         end
+      end
+      Validatable::ValidatesPresenceOf.class_eval do
         after_validate do |result, instance, attribute|
           instance.errors.add(attribute, instance.errors.on(attribute) + " twice")
         end
       end
       instance = klass.new
       instance.valid?
-      assert_equal "changed message twice", instance.errors.on(:name) 
+      assert_equal "can't be empty twice changed message", instance.errors.on(:name) 
       Validatable::ValidatesPresenceOf.after_validations.clear
+      Validatable::ValidationBase.after_validations.clear
     end
 
     test "matching groups are used as validations when multiple groups are given to valid" do
