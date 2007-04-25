@@ -51,6 +51,26 @@ module Validatable
       end
     end
 
+    # call-seq: validates_numericality_of(*args)
+    # 
+    # Validates that the specified attribute is numeric.
+    # 
+    #   class Person
+    #     include Validatable
+    #     validates_numericality_of :age
+    #   end
+    # 
+    # Configuration options:
+    # 
+    #     * message - The message to add to the errors collection when the validation fails
+    #     * times - The number of times the validation applies
+    #     * level - The level at which the validation should occur
+    #     * if - A block that when executed must return true of the validation will not occur
+    #     * group - The group that this validation belongs to.  A validation can belong to multiple groups
+    def validates_numericality_of(*args)
+      add_validations(args, ValidatesNumericalityOf)
+    end
+
     # call-seq: validates_acceptance_of(*args)
     #
     # Encapsulates the pattern of wanting to validate the acceptance of a terms of service check box (or similar agreement). Example:
