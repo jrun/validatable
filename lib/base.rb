@@ -248,7 +248,7 @@ module Validatable
       validation_levels.sort.each do |level|
         validations_for_level(level).each do |validation|
           if validation.should_validate?(self)
-            add_error_for(validation) unless validation.valid?(self)
+            run_validation(validation)
           end
         end
         return unless self.errors.empty?
@@ -256,8 +256,10 @@ module Validatable
     end
   end
   
-  def add_error_for(validation)
-    self.errors.add(validation.attribute, validation.message)
+  def run_validation(validation)
+    validation_result = validation.valid?(self)
+    self.errors.add(validation.attribute, validation.message) unless validation_result
+    validation.run_after_validate(validation_result, self, validation.attribute)
   end
   
   def validation_levels #:nodoc:

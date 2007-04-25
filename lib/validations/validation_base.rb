@@ -1,6 +1,6 @@
 module Validatable
   class ValidationBase #:nodoc:
-    attr_accessor :attribute, :message
+    attr_accessor :attribute, :message, :times
     attr_reader :level, :groups
     
     def initialize(attribute, options={})
@@ -18,8 +18,26 @@ module Validatable
     
     def validate_this_time?
       return true if @times.nil?
-      @times -= 1
-      @times >= 0
+      self.times -= 1
+      self.times >= 0
+    end
+    
+    def run_after_validate(result, instance, attribute)
+      self.class.after_validations.each do |block|
+        block.call result, instance, attribute
+      end
+    end
+    
+    class << self
+      attr_writer :after_validations
+
+      def after_validate(&block)
+        after_validations << block
+      end
+      
+      def after_validations
+        @after_validations ||= []
+      end
     end
   end
 end

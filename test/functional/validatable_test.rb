@@ -85,6 +85,27 @@ module Functional
       assert_equal true, instance.valid?(:group_two)
     end
     
+    test "after validate is called following a validation" do
+      klass = Class.new do
+        include Validatable
+        validates_presence_of :name
+        attr_accessor :name
+      end
+      
+      Validatable::ValidatesPresenceOf.class_eval do
+        after_validate do |result, instance, attribute|
+          instance.errors.add(attribute, "changed message")
+        end
+        after_validate do |result, instance, attribute|
+          instance.errors.add(attribute, instance.errors.on(attribute) + " twice")
+        end
+      end
+      instance = klass.new
+      instance.valid?
+      assert_equal "changed message twice", instance.errors.on(:name) 
+      Validatable::ValidatesPresenceOf.after_validations.clear
+    end
+
     test "matching groups are used as validations when multiple groups are given to valid" do
       klass = Class.new do
         include Validatable
