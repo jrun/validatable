@@ -236,6 +236,7 @@ module Validatable
     def add_validations(args, klass) #:nodoc:
       options = args.last.is_a?(Hash) ? args.pop : {}
       args.each do |attribute|
+        klass.must_understand(options)
         new_validation = klass.new(attribute, options)
         yield new_validation, options if block_given?
         self.validations << new_validation

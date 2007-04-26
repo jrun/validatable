@@ -12,4 +12,9 @@ class ValidatesFormatOfTest < Test::Unit::TestCase
     validation.with = /book/
     assert_equal true, validation.valid?(stub(:name=>"book"))
   end
+  
+  expect true do
+    Validatable::ValidatesFormatOf.must_understand(:message => nil, :if => nil, :times => nil, :level => nil, :groups => nil, :with => nil)
+  end
+  
 end

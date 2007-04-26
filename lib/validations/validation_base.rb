@@ -1,5 +1,8 @@
 module Validatable
   class ValidationBase #:nodoc:
+    extend Understandable
+    understands :message, :if, :times, :level, :groups
+  
     attr_accessor :attribute, :message, :times
     attr_reader :level, :groups
     
