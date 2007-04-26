@@ -213,7 +213,7 @@ module Validatable
             instance.errors.add(validation.attribute, validation.message) unless validation.valid?(instance)
           end
         end
-        return unless instance.errors.empty?
+        return if instance.errors.any?
       end
     end
     

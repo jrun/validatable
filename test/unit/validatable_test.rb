@@ -21,7 +21,7 @@ module Unit
       instance.expects(:errors).returns(errors=mock).times 3
       errors.expects(:add).with('attribute', 'message')
       errors.expects(:add).with('attribute2', 'message2')
-      errors.expects(:empty?).returns true
+      errors.expects(:any?).returns false
       klass.validate(instance)
     end
 
