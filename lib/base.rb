@@ -109,6 +109,7 @@ module Validatable
     #
     # Configuration options:
     # 
+    #     * case_sensitive - Whether or not to apply case-sensitivity on the comparison.  Defaults to true.
     #     * message - The message to add to the errors collection when the validation fails
     #     * times - The number of times the validation applies
     #     * level - The level at which the validation should occur
@@ -171,7 +172,7 @@ module Validatable
       end
     end
     
-    # call-seq: include_validations_for(*args)
+    # call-seq: include_validations_for(attribute_to_validate, options = {})
     # 
     # Validates the specified attributes.
     #   class Person
@@ -182,7 +183,7 @@ module Validatable
     # 
     #   class PersonPresenter
     #     include Validatable
-    #     include_validations_for :person
+    #     include_validations_for :person, :map => { :name => :namen }, :if => lambda { not person.nil? }
     #     attr_accessor :person
     #     
     #     def initialize(person)
@@ -192,9 +193,14 @@ module Validatable
     #   
     #   presenter = PersonPresenter.new(Person.new)
     #   presenter.valid? #=> false
-    #   presenter.errors.on(:name) #=> "can't be blank"
+    #   presenter.errors.on(:namen) #=> "can't be blank"
     #
     # The person attribute will be validated.  If person is invalid the errors will be added to the PersonPresenter errors collection.
+    #
+    # Configuration options:
+    # 
+    #     * map - A hash that maps attributes of the child to attributes of the parent.
+    #     * if - A block that when executed must return true of the validation will not occur.
     def include_validations_for(attribute_to_validate, options = {})
       children_to_validate << ChildValidation.new(attribute_to_validate, options[:map] || {}, options[:if] || lambda { true })
     end
@@ -276,7 +282,7 @@ module Validatable
     end
   end
   
-  def run_validation(validation)
+  def run_validation(validation) #:nodoc:
     validation_result = validation.valid?(self)
     self.errors.add(validation.attribute, validation.message) unless validation_result
     validation.run_after_validate(validation_result, self, validation.attribute)

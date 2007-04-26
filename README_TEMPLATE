@@ -72,6 +72,29 @@ Similar to Rails, Validatable also supports conditional validation.
 	  validates_format_of :name, :with => /.+/, :if => Proc.new { !name.nil? }
 	end
 	Person.new.valid? #=> true
+		
+Validatable also exposes an after_validate hook method.
+
+	class Person
+	  include Validatable
+	  validates_presence_of :name
+	  attr_accessor :name
+	end
+	
+	class ValidatesPresenceOf
+	  after_validate do |result, instance, attribute|
+			instance.errors.add("#{attribute} can't be blank") unless result
+		end
+	end
+
+	person = Person.new
+	person.valid? #=> false
+	person.errors.on(:name) #=> "name can't be blank"
+	
+The after_validate hook yields the result of the validation being run, 
+the instance the validation was run on, and the attribute that was validate
+
+In the above example the attribute "name" is appended to the message.
 
 See the tests for more examples
 

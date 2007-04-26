@@ -1,5 +1,5 @@
 module Validatable
-  class ChildValidation
+  class ChildValidation #:nodoc:
     attr_accessor :attribute, :map, :should_validate_proc
     
     def initialize(attribute, map, should_validate_proc)
