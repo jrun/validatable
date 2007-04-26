@@ -2,6 +2,19 @@ require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 
 module Functional
   class ValidatableTest < Test::Unit::TestCase
+    test "validations are only executed once" do
+      if_condition = mock
+      if_condition.expects(:where?).times 2
+      klass = Class.new do
+        include Validatable
+        attr_accessor :name, :address
+        validates_presence_of :name, :if => lambda { if_condition.where? }
+        validates_presence_of :address, :if => lambda { if_condition.where? }
+      end
+      instance = klass.new
+      instance.valid?
+    end
+    
     test "given a child class with validations, when parent class is validated, then the error is in the parent objects error collection" do
       child_class = Class.new do
         include Validatable

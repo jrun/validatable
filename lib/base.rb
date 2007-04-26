@@ -271,35 +271,28 @@ module Validatable
   
   protected
   def validate(groups) #:nodoc:
-    validations_for_groups(groups).each do |validation|
-      validation_levels.sort.each do |level|
-        validations_for_level(level).each do |validation|
-          if validation.should_validate?(self)
-            run_validation(validation)
-          end
-        end
-        return unless self.errors.empty?
+    validation_levels.each do |level|
+      validations_for_level_and_groups(level, groups).each do |validation|
+        run_validation(validation) if validation.should_validate?(self)
       end
+      return unless self.errors.empty?
     end
   end
-  
+
   def run_validation(validation) #:nodoc:
     validation_result = validation.valid?(self)
     self.errors.add(validation.attribute, validation.message) unless validation_result
     validation.run_after_validate(validation_result, self, validation.attribute)
   end
   
+  def validations_for_level_and_groups(level, groups)
+    validations_for_level = self.validations.select { |validation| validation.level == level }
+    return validations_for_level if groups.empty?
+    validations_for_level.select { |validation| (groups & validation.groups).any? }
+  end
+  
   def validation_levels #:nodoc:
-    self.validations.collect { |validation| validation.level }.uniq
-  end
-  
-  def validations_for_level(level) #:nodoc:
-    self.validations.select { |validation| validation.level == level }
-  end
-  
-  def validations_for_groups(groups) #:nodoc:
-    return self.validations if groups.empty?
-    self.validations.select { |validation|  (groups & validation.groups).any? }
+    self.validations.collect { |validation| validation.level }.uniq.sort
   end
   
   def validations #:nodoc:
