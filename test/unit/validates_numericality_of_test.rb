@@ -32,5 +32,10 @@ module Unit
       instance = stub(:multiple_dots => "50.0.0")
       assert_equal false, validation.valid?(instance)
     end
+    
+    expect true do
+      Validatable::ValidatesNumericalityOf.must_understand(:message => nil, :if => nil, :times => nil, :level => nil, :groups => nil)
+    end
+    
   end
 end

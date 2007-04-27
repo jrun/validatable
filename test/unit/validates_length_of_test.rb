@@ -38,5 +38,11 @@ module Unit
       instance = stub(:username=>"udfgdf")
       assert_equal true, validation.valid?(instance)
     end
+    
+    expect true do
+      options = {:message => nil, :if => nil, :times => nil, :level => nil, :groups => nil, :maximum => nil, :minimum => nil, :is => nil}
+      Validatable::ValidatesLengthOf.must_understand(options)
+    end
+    
   end
 end

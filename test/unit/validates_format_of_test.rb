@@ -13,6 +13,12 @@ class ValidatesFormatOfTest < Test::Unit::TestCase
     assert_equal true, validation.valid?(stub(:name=>"book"))
   end
   
+  test "when attribute value is an integer it should be converted to a string before matching" do
+    validation = Validatable::ValidatesFormatOf.new :age
+    validation.with = /14/
+    assert_equal true, validation.valid?(stub(:age=>14))
+  end
+  
   expect true do
     Validatable::ValidatesFormatOf.must_understand(:message => nil, :if => nil, :times => nil, :level => nil, :groups => nil, :with => nil)
   end

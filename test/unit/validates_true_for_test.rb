@@ -13,4 +13,8 @@ class ValidatesTrueForTest < Test::Unit::TestCase
     assert_equal true, validation.valid?(stub_everything)
   end
   
+  expect true do
+    Validatable::ValidatesTrueFor.must_understand(:message => nil, :if => nil, :times => nil, :level => nil, :groups => nil, :logic => nil)
+  end
+  
 end

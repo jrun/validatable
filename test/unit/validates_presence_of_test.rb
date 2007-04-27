@@ -16,4 +16,8 @@ class ValidatesPresenceOfTest < Test::Unit::TestCase
     assert_equal true, validation.valid?(stub(:employee => stub(:nil? => false)))
   end
   
+  expect true do
+    Validatable::ValidatesPresenceOf.must_understand(:message => nil, :if => nil, :times => nil, :level => nil, :groups => nil)
+  end
+  
 end

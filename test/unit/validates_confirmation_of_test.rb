@@ -62,4 +62,10 @@ class ValidatesConfirmationOfTest < Test::Unit::TestCase
     validation.case_sensitive = false
     assert_equal true, validation.valid?(stub(:username => nil, :username_confirmation => nil))
   end
+  
+  expect true do
+    options = { :message => nil, :if => nil, :times => nil, :level => nil, :groups => nil, :case_sensitive => nil }
+    Validatable::ValidatesConfirmationOf.must_understand(options)
+  end
+  
 end

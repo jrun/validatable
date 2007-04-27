@@ -18,7 +18,7 @@ module Validatable
         errors << key.to_s unless all_understandings.include?(key)
         errors
       end
-      raise "invalid options: #{invalid_options.join(', ')}" if invalid_options.any?
+      raise ArgumentError.new("invalid options: #{invalid_options.join(', ')}") if invalid_options.any?
       true
     end
   end

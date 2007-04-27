@@ -34,7 +34,7 @@ class ValidationBaseTest < Test::Unit::TestCase
   end
   
   test "invalid option causes raise" do
-    assert_raises RuntimeError do
+    assert_raises ArgumentError do
       Validatable::ValidationBase.must_understand(:foo => 1, :bar => 2)
     end
   end

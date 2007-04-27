@@ -12,4 +12,9 @@ class ValidatesAcceptanceOfTest < Test::Unit::TestCase
     instance = stub(:acceptance=>'false')
     assert_equal false, validation.valid?(instance)
   end
+  
+  expect true do
+    Validatable::ValidatesAcceptanceOf.must_understand(:message => nil, :if => nil, :times => nil, :level => nil, :groups => nil)
+  end
+  
 end

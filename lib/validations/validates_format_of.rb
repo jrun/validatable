@@ -4,7 +4,7 @@ module Validatable
     understands :with
   
     def valid?(instance)
-      instance.send(self.attribute) =~ self.with && true
+      not (instance.send(self.attribute).to_s =~ self.with).nil?
     end
     
     def message
