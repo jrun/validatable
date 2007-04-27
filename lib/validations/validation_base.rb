@@ -12,7 +12,11 @@ module Validatable
       @conditional = options[:if] || Proc.new { true }
       @times = options[:times]
       @level = options[:level] || 1
-      @groups = options[:groups].is_a?(Array) ? options[:groups] : [options[:groups]]
+      @groups = case options[:groups]
+        when nil then []
+        when Array then options[:groups]
+        else [options[:groups]]
+      end
     end
     
     def should_validate?(instance)

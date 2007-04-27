@@ -237,66 +237,26 @@ module Validatable
     def add_validations(args, klass) #:nodoc:
       options = args.last.is_a?(Hash) ? args.pop : {}
       args.each do |attribute|
-        klass.must_understand(options)
-        new_validation = klass.new(attribute, options)
+        klass.must_understand options
+        new_validation = klass.new attribute, options
         yield new_validation, options if block_given?
         self.validations << new_validation
+        self.create_valid_method_for_groups  new_validation.groups
+      end
+    end
+    
+    def create_valid_method_for_groups(groups)
+      groups.each do |group|
+        self.class_eval do
+          define_method :"valid_for_#{group}?" do
+            valid_for_group?(group)
+          end
+        end
       end
     end
     
     def children_to_validate #:nodoc:
       @children_to_validate ||= []
     end
-  end
-  
-  def self.included(klass) #:nodoc:
-    klass.extend Validatable::ClassMethods
-  end
-  
-  # call-seq: valid?
-  #
-  # Returns true if no errors were added otherwise false.
-  def valid?(*groups)
-    errors.clear
-    self.class.validate_children(self, groups)
-    self.validate(groups)
-    errors.empty?
-  end
-  
-  # call-seq: errors
-  #
-  # Returns the Errors object that holds all information about attribute error messages.
-  def errors
-    @errors ||= Validatable::Errors.new
-  end
-  
-  protected
-  def validate(groups) #:nodoc:
-    validation_levels.each do |level|
-      validations_for_level_and_groups(level, groups).each do |validation|
-        run_validation(validation) if validation.should_validate?(self)
-      end
-      return unless self.errors.empty?
-    end
-  end
-
-  def run_validation(validation) #:nodoc:
-    validation_result = validation.valid?(self)
-    self.errors.add(validation.attribute, validation.message) unless validation_result
-    validation.run_after_validate(validation_result, self, validation.attribute)
-  end
-  
-  def validations_for_level_and_groups(level, groups)
-    validations_for_level = self.validations.select { |validation| validation.level == level }
-    return validations_for_level if groups.empty?
-    validations_for_level.select { |validation| (groups & validation.groups).any? }
-  end
-  
-  def validation_levels #:nodoc:
-    self.validations.collect { |validation| validation.level }.uniq.sort
-  end
-  
-  def validations #:nodoc:
-    @validations ||= self.class.validations.collect { |validation| validation.dup }
   end
 end
