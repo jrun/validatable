@@ -48,6 +48,7 @@ module Validatable
       add_validations(args, ValidatesLengthOf) do |validation, options|
         validation.minimum = options[:minimum]
         validation.maximum = options[:maximum]
+        validation.is = options[:is]
       end
     end
 

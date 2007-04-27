@@ -17,6 +17,20 @@ module Unit
       assert_equal false, validation.valid?(instance)
     end
   
+    test "is length is false" do
+      validation = Validatable::ValidatesLengthOf.new :username
+      validation.is = 2
+      instance = stub(:username=>"u")
+      assert_equal false, validation.valid?(instance)
+    end
+    
+    test "is length is true" do
+      validation = Validatable::ValidatesLengthOf.new :username
+      validation.is = 2
+      instance = stub(:username=>"uu")
+      assert_equal true, validation.valid?(instance)
+    end
+    
     test "valid length" do
       validation = Validatable::ValidatesLengthOf.new :username
       validation.minimum = 2
