@@ -64,6 +64,20 @@ Validations can be given levels. If a validation fails on a level the validation
 	person.errors.on(:name) #=> "name message"
 	person.errors.on(:address) #=> nil
 
+Validations can also be given groups. Groups can be used to validate an object when it can be valid in various states.  For example a mortgage application may be valid for saving (saving a partial application), but that same mortgage application would not be valid for underwriting. In our example a application can be saved as long as a Social Security Number is present; however, an application can not be underwritten unless the name attribute contains a value.
+
+  class MortgageApplication
+    include Validatable
+    validates_presence_of :ssn, :groups => [:saving, :underwriting]
+    validates_presence_of :name, :groups => :underwriting
+    attr_accessor :name, :ssn
+  end
+  
+  application = MortgageApplication.new
+  application.ssn = 377990118
+  application.valid_for_saving? #=> true
+  application.valid_for_underwriting? #=> false
+
 Similar to Rails, Validatable also supports conditional validation.
 
 	class Person
