@@ -248,7 +248,7 @@ module Validatable
     def create_valid_method_for_groups(groups)
       groups.each do |group|
         self.class_eval do
-          define_method :"valid_for_#{group}?" do
+          define_method "valid_for_#{group}?".to_sym do
             valid_for_group?(group)
           end
         end
