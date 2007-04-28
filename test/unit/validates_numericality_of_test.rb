@@ -21,6 +21,20 @@ module Unit
       assert_equal true, validation.valid?(instance)
     end
   
+    test "when value is a decimal but only_integer is true, then valid is false" do
+      validation = Validatable::ValidatesNumericalityOf.new :some_decimal
+      validation.only_integer = true
+      instance = stub(:some_decimal => 1.23)
+      assert_equal false, validation.valid?(instance)
+    end
+    
+    test "when value is an integer string and only_integer is true, then valid is true" do
+      validation = Validatable::ValidatesNumericalityOf.new :some_negative_number
+      validation.only_integer = true
+      instance = stub(:some_negative_number => "-1")
+      assert_equal true, validation.valid?(instance)
+    end
+    
     test "when value has non numeric characters then valid is false" do
       validation = Validatable::ValidatesNumericalityOf.new :some_non_numeric
       instance = stub(:some_non_numeric => "50F")
@@ -34,7 +48,8 @@ module Unit
     end
     
     expect true do
-      Validatable::ValidatesNumericalityOf.must_understand(:message => nil, :if => nil, :times => nil, :level => nil, :groups => nil)
+      options = [:message, :if, :times, :level, :groups, :only_integer]
+      Validatable::ValidatesNumericalityOf.must_understand(options.to_blank_options_hash)
     end
     
   end

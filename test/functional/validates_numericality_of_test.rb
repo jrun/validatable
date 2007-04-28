@@ -41,5 +41,17 @@ module Functional
       assert_equal nil, instance.errors.on(:valid_number)
     end
     
+    test "when validating an integer and the value is a decimal an error should exist on the instance" do
+      klass = Class.new do
+        include Validatable
+        validates_numericality_of :valid_number, :only_integer => true
+        attr_accessor :valid_number
+      end
+      
+      instance = klass.new
+      instance.valid_number = 1.23
+      instance.valid?
+      assert_equal "must be a number", instance.errors.on(:valid_number)
+    end
   end
 end

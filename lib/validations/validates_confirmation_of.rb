@@ -3,6 +3,10 @@ module Validatable
     attr_accessor :case_sensitive
     understands :case_sensitive
     
+    def case_sensitive
+      @case_sensitive === nil ? true : @case_sensitive
+    end
+    
     def valid?(instance)
       return instance.send(self.attribute) == instance.send("#{self.attribute}_confirmation".to_sym) if case_sensitive
       instance.send(self.attribute).to_s.casecmp(instance.send("#{self.attribute}_confirmation".to_sym).to_s) == 0

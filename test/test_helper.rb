@@ -24,3 +24,9 @@ class Test::Unit::TestCase
     assert_equal Set.new(a), Set.new(b)
   end
 end
+
+class Array
+  def to_blank_options_hash
+    self.inject({}) {|hash, value| hash[value] = nil; hash }
+  end
+end

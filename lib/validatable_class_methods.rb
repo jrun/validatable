@@ -20,9 +20,7 @@ module Validatable
     #     * with - The regular expression used to validate the format
     #     * group - The group that this validation belongs to.  A validation can belong to multiple groups
     def validates_format_of(*args)
-      add_validations(args, ValidatesFormatOf) do |validation, options|
-        validation.with = options[:with]
-      end
+      add_validations(args, ValidatesFormatOf)
     end
     
     # call-seq: validates_length_of(*args)
@@ -43,13 +41,11 @@ module Validatable
     #     * if - A block that when executed must return true of the validation will not occur
     #     * minimum - The minimum size of the attribute
     #     * maximum - The maximum size of the attribute
+    #     * is - The size the attribute must be
+    #     * within - A range that the size of the attribute must fall within
     #     * group - The group that this validation belongs to.  A validation can belong to multiple groups
     def validates_length_of(*args)
-      add_validations(args, ValidatesLengthOf) do |validation, options|
-        validation.minimum = options[:minimum]
-        validation.maximum = options[:maximum]
-        validation.is = options[:is]
-      end
+      add_validations(args, ValidatesLengthOf)
     end
 
     # call-seq: validates_numericality_of(*args)
@@ -68,6 +64,7 @@ module Validatable
     #     * level - The level at which the validation should occur
     #     * if - A block that when executed must return true of the validation will not occur
     #     * group - The group that this validation belongs to.  A validation can belong to multiple groups
+    #     * only_integer - Whether the attribute must be an integer (default is false)
     def validates_numericality_of(*args)
       add_validations(args, ValidatesNumericalityOf)
     end
@@ -117,13 +114,7 @@ module Validatable
     #     * if - A block that when executed must return true of the validation will not occur
     #     * group - The group that this validation belongs to.  A validation can belong to multiple groups
     def validates_confirmation_of(*args)
-      add_validations(args, ValidatesConfirmationOf) do |validation, options|
-        validation.case_sensitive = if options.has_key? :case_sensitive
-          options[:case_sensitive]
-        else
-          true
-        end
-      end
+      add_validations(args, ValidatesConfirmationOf)
     end
   
     # call-seq: validates_presence_of(*args)
@@ -168,9 +159,7 @@ module Validatable
     #     * group - The group that this validation belongs to.  A validation can belong to multiple groups
     #     * logic - A block that executes to perform the validation
     def validates_true_for(*args)
-      add_validations(args, ValidatesTrueFor) do |validation, options|
-        validation.logic = options[:logic]
-      end
+      add_validations(args, ValidatesTrueFor)
     end
     
     # call-seq: include_validations_for(attribute_to_validate, options = {})
@@ -239,7 +228,8 @@ module Validatable
       args.each do |attribute|
         klass.must_understand options
         new_validation = klass.new attribute, options
-        yield new_validation, options if block_given?
+        yield new_validation, options if block_given?    
+        set_all_understood_options(new_validation, options)
         self.validations << new_validation
         self.create_valid_method_for_groups  new_validation.groups
       end
@@ -257,6 +247,12 @@ module Validatable
     
     def children_to_validate #:nodoc:
       @children_to_validate ||= []
+    end
+    
+    def set_all_understood_options validation, options
+      validation.class.understandings.each do |understanding|
+        validation.send("#{understanding}=", options[understanding])
+      end
     end
   end
 end
