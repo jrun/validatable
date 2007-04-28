@@ -16,6 +16,11 @@ module Validatable
         @defaults ||= {}
       end
       
+      def all_defaults
+        return defaults.merge(self.superclass.all_defaults) if self.superclass.respond_to? :all_defaults
+        defaults
+      end
+      
       def after_validate(&block)
         after_validations << block
       end
@@ -25,25 +30,22 @@ module Validatable
       end
       
       def all_after_validations
-        return after_validations + self.superclass.after_validations if self.superclass.respond_to? :after_validations
+        return after_validations + self.superclass.all_after_validations if self.superclass.respond_to? :all_after_validations
         after_validations
       end
     end
 
     option :message, :if, :times, :level, :groups
+    default :if => lambda { true }, :level => 1, :groups => []
     attr_accessor :attribute
     
     def initialize(attribute, options={})
-      self.attribute = attribute
-      self.message = options[:message]
-      self.if = options[:if] || Proc.new { true }
-      self.times = options[:times]
-      self.level = options[:level] || 1
-      self.groups = case options[:groups]
-        when nil then []
-        when Array then options[:groups]
-        else [options[:groups]]
+      self.class.all_understandings.each do |understanding|
+        options[understanding] = self.class.all_defaults[understanding] unless options.has_key? understanding
+        self.instance_variable_set("@#{understanding}", options[understanding])
       end
+      self.attribute = attribute
+      self.groups = [self.groups] unless self.groups.is_a?(Array)
     end
     
     def should_validate?(instance)

@@ -228,10 +228,8 @@ module Validatable
       args.each do |attribute|
         klass.must_understand options
         new_validation = klass.new attribute, options
-        yield new_validation, options if block_given?    
-        set_all_understood_options(new_validation, options)
         self.validations << new_validation
-        self.create_valid_method_for_groups  new_validation.groups
+        self.create_valid_method_for_groups new_validation.groups
       end
     end
     
@@ -249,11 +247,5 @@ module Validatable
       @children_to_validate ||= []
     end
     
-    def set_all_understood_options(validation, options) #:nodoc:
-      validation.class.understandings.each do |understanding|
-        options[understanding] = validation.class.defaults[understanding] unless options.has_key? understanding
-        validation.send("#{understanding}=", options[understanding])
-      end
-    end
   end
 end
