@@ -245,7 +245,7 @@ module Validatable
       end
     end
     
-    def create_valid_method_for_groups(groups)
+    def create_valid_method_for_groups(groups) #:nodoc:
       groups.each do |group|
         self.class_eval do
           define_method "valid_for_#{group}?".to_sym do

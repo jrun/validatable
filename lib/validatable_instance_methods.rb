@@ -18,7 +18,7 @@ module Validatable
   end
   
   protected
-  def valid_for_group?(*groups)
+  def valid_for_group?(*groups) #:nodoc:
     errors.clear
     self.class.validate_children(self, groups)
     self.validate(groups)
@@ -40,7 +40,7 @@ module Validatable
     validation.run_after_validate(validation_result, self, validation.attribute)
   end
   
-  def validations_for_level_and_groups(level, groups)
+  def validations_for_level_and_groups(level, groups) #:nodoc:
     validations_for_level = self.validations.select { |validation| validation.level == level }
     return validations_for_level if groups.empty?
     validations_for_level.select { |validation| (groups & validation.groups).any? }

@@ -77,6 +77,8 @@ Validations can also be given groups. Groups can be used to validate an object w
   application.ssn = 377990118
   application.valid_for_saving? #=> true
   application.valid_for_underwriting? #=> false
+  
+As you can see, you can use an array if the validation needs to be part of various groups.  However, if the validation only applies to one group you can simply use a symbol for the group name.
 
 Similar to Rails, Validatable also supports conditional validation.
 
@@ -106,7 +108,7 @@ Validatable also exposes an after_validate hook method.
 	person.errors.on(:name) #=> "name can't be blank"
 	
 The after_validate hook yields the result of the validation being run, 
-the instance the validation was run on, and the attribute that was validate
+the instance the validation was run on, and the attribute that was validated
 
 In the above example the attribute "name" is appended to the message.
 

@@ -1,6 +1,8 @@
 require 'test/unit'
 require 'rubygems'
 require 'mocha'
+require 'set'
+
 require File.dirname(__FILE__) + '/../lib/validatable'
 
 class << Test::Unit::TestCase
@@ -14,5 +16,11 @@ class << Test::Unit::TestCase
     define_method :"test_#{caller.first.split("/").last}" do
       assert_equal expected_value, instance_eval(&block)
     end 
+  end
+end
+
+class Test::Unit::TestCase
+  def assert_array_equal a, b
+    assert_equal Set.new(a), Set.new(b)
   end
 end

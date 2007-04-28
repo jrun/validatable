@@ -1,5 +1,5 @@
 module Validatable
-  module Understandable
+  module Understandable #:nodoc:
     def understands(*args)
       understandings.concat args
     end
@@ -9,7 +9,7 @@ module Validatable
     end
     
     def all_understandings
-      return understandings + self.superclass.understandings if self.superclass.respond_to? :understandings
+      return understandings + self.superclass.all_understandings if self.superclass.respond_to? :all_understandings
       understandings
     end
     
