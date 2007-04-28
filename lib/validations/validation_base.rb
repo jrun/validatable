@@ -1,6 +1,8 @@
 module Validatable
   class ValidationBase #:nodoc:
     class << self
+      include Understandable
+      
       def option(*args)
         attr_accessor *args
         understands *args
@@ -28,7 +30,6 @@ module Validatable
       end
     end
 
-    extend Understandable
     option :message, :if, :times, :level, :groups
     attr_accessor :attribute
     
