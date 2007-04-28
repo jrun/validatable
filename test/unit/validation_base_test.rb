@@ -35,12 +35,12 @@ class ValidationBaseTest < Test::Unit::TestCase
   
   test "invalid option causes raise" do
     assert_raises ArgumentError do
-      Validatable::ValidationBase.must_understand(:foo => 1, :bar => 2)
+      Validatable::ValidationBase.new(:base).must_understand(:foo => 1, :bar => 2)
     end
   end
   
   expect true do
-    Validatable::ValidationBase.must_understand(:message => nil, :if => nil, :times => nil, :level => nil, :groups => nil)
+    Validatable::ValidationBase.new(:base).must_understand(:message => nil, :if => nil, :times => nil, :level => nil, :groups => nil)
   end
 
 end

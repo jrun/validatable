@@ -14,7 +14,7 @@ class ValidatesAcceptanceOfTest < Test::Unit::TestCase
   end
   
   expect true do
-    Validatable::ValidatesAcceptanceOf.must_understand(:message => nil, :if => nil, :times => nil, :level => nil, :groups => nil)
+    Validatable::ValidatesAcceptanceOf.new(:test).must_understand(:message => nil, :if => nil, :times => nil, :level => nil, :groups => nil)
   end
   
 end

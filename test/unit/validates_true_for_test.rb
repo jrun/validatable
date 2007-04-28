@@ -12,7 +12,8 @@ class ValidatesTrueForTest < Test::Unit::TestCase
   end
   
   expect true do
-    Validatable::ValidatesTrueFor.must_understand(:message => nil, :if => nil, :times => nil, :level => nil, :groups => nil, :logic => nil)
+    options = [:message, :if, :times, :level, :groups, :logic]
+    Validatable::ValidatesTrueFor.new(:name).must_understand(options.to_blank_options_hash)
   end
   
 end

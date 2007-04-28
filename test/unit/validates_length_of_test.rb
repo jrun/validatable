@@ -58,8 +58,7 @@ module Unit
 
     expect true do
       options = [:message, :if, :times, :level, :groups, :maximum, :minimum, :is, :within]
-
-      Validatable::ValidatesLengthOf.must_understand(options.to_blank_options_hash)
+      Validatable::ValidatesLengthOf.new(:test).must_understand(options.to_blank_options_hash)
     end
     
   end

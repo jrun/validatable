@@ -47,7 +47,7 @@ module Unit
     
     expect true do
       options = [:message, :if, :times, :level, :groups, :only_integer]
-      Validatable::ValidatesNumericalityOf.must_understand(options.to_blank_options_hash)
+      Validatable::ValidatesNumericalityOf.new(:test).must_understand(options.to_blank_options_hash)
     end
     
   end

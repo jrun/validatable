@@ -17,7 +17,7 @@ class ValidatesPresenceOfTest < Test::Unit::TestCase
   end
   
   expect true do
-    Validatable::ValidatesPresenceOf.must_understand(:message => nil, :if => nil, :times => nil, :level => nil, :groups => nil)
+    Validatable::ValidatesPresenceOf.new(:test).must_understand(:message => nil, :if => nil, :times => nil, :level => nil, :groups => nil)
   end
   
 end

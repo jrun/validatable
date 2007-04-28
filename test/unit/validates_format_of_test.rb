@@ -16,8 +16,15 @@ class ValidatesFormatOfTest < Test::Unit::TestCase
     assert_equal true, validation.valid?(stub(:age=>14))
   end
   
+  test "when no with is given, then an error is raised during construction" do
+    assert_raises ArgumentError do
+      validation = Validatable::ValidatesFormatOf.new :age
+    end
+  end
+  
   expect true do
-    Validatable::ValidatesFormatOf.must_understand(:message => nil, :if => nil, :times => nil, :level => nil, :groups => nil, :with => nil)
+    options = [:message, :if, :times, :level, :groups, :with]
+    Validatable::ValidatesFormatOf.new(:test, :with => //).must_understand(options.to_blank_options_hash)
   end
   
 end

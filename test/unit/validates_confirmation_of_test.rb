@@ -57,7 +57,7 @@ class ValidatesConfirmationOfTest < Test::Unit::TestCase
   
   expect true do
     options = { :message => nil, :if => nil, :times => nil, :level => nil, :groups => nil, :case_sensitive => nil }
-    Validatable::ValidatesConfirmationOf.must_understand(options)
+    Validatable::ValidatesConfirmationOf.new(:test).must_understand(options)
   end
   
 end
