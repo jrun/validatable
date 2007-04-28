@@ -1,9 +1,6 @@
 module Validatable
   class ValidatesLengthOf < ValidationBase #:nodoc:
-    Attributes = [:minimum, :maximum, :is, :within]
-    
-    attr_accessor *Attributes
-    understands   *Attributes
+    option :minimum, :maximum, :is, :within
     
     def message
       super || "is invalid"

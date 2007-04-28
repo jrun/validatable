@@ -1,7 +1,6 @@
 module Validatable 
   class ValidatesNumericalityOf < ValidationBase #:nodoc:
-    attr_accessor :only_integer
-    understands   :only_integer
+    option :only_integer
     
     def valid?(instance)
       value = instance.send(self.attribute).to_s

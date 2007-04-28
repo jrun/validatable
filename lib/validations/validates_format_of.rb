@@ -1,7 +1,6 @@
 module Validatable
   class ValidatesFormatOf < ValidationBase #:nodoc:
-    attr_accessor :with
-    understands :with
+    option :with
   
     def valid?(instance)
       not (instance.send(self.attribute).to_s =~ self.with).nil?

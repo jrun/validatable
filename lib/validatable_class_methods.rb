@@ -249,8 +249,9 @@ module Validatable
       @children_to_validate ||= []
     end
     
-    def set_all_understood_options validation, options
+    def set_all_understood_options(validation, options) #:nodoc:
       validation.class.understandings.each do |understanding|
+        options[understanding] = validation.class.defaults[understanding] unless options.has_key? understanding
         validation.send("#{understanding}=", options[understanding])
       end
     end

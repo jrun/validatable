@@ -1,11 +1,7 @@
 module Validatable
   class ValidatesConfirmationOf < ValidationBase #:nodoc:
-    attr_accessor :case_sensitive
-    understands :case_sensitive
-    
-    def case_sensitive
-      @case_sensitive === nil ? true : @case_sensitive
-    end
+    option :case_sensitive
+    default :case_sensitive => true
     
     def valid?(instance)
       return instance.send(self.attribute) == instance.send("#{self.attribute}_confirmation".to_sym) if case_sensitive
