@@ -3,11 +3,7 @@ module Validatable
     class << self
       def required_option(*args)
         option(*args)
-        required_options.concat args
-      end
-      
-      def required_options
-        @required_options ||= []
+        requires(*args)
       end
       
       def option(*args)
@@ -43,6 +39,8 @@ module Validatable
     end
 
     include Understandable
+    include Requireable
+    
     option :message, :if, :times, :level, :groups
     default :if => lambda { true }, :level => 1, :groups => []
     attr_accessor :attribute
@@ -60,15 +58,6 @@ module Validatable
     
     def should_validate?(instance)
       instance.instance_eval(&self.if) && validate_this_time?
-    end
-    
-    def requires(options)
-      required_options = self.class.required_options.inject([]) do |errors, attribute|
-        errors << attribute.to_s unless options.has_key?(attribute)
-        errors
-      end
-      raise ArgumentError.new("#{self.class} requires options: #{required_options.join(', ')}") if required_options.any?
-      true
     end
     
     def validate_this_time?
