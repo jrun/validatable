@@ -22,15 +22,13 @@ module Unit
     end
   
     test "when value is a decimal but only_integer is true, then valid is false" do
-      validation = Validatable::ValidatesNumericalityOf.new :some_decimal
-      validation.only_integer = true
+      validation = Validatable::ValidatesNumericalityOf.new :some_decimal, :only_integer => true
       instance = stub(:some_decimal => 1.23)
       assert_equal false, validation.valid?(instance)
     end
     
     test "when value is an integer string and only_integer is true, then valid is true" do
-      validation = Validatable::ValidatesNumericalityOf.new :some_negative_number
-      validation.only_integer = true
+      validation = Validatable::ValidatesNumericalityOf.new :some_negative_number, :only_integer => true
       instance = stub(:some_negative_number => "-1")
       assert_equal true, validation.valid?(instance)
     end

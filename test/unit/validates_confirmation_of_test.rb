@@ -14,52 +14,44 @@ class ValidatesConfirmationOfTest < Test::Unit::TestCase
   end
   
   test "valid confirmation with case insensitive" do
-    validation = Validatable::ValidatesConfirmationOf.new :username
-    validation.case_sensitive = false
+    validation = Validatable::ValidatesConfirmationOf.new :username, :case_sensitive => false
     instance = stub(:username=>"username", :username_confirmation=>"USERNAME")
     assert_equal true, validation.valid?(instance)
   end
   
   test "invalid confirmation with case sensitive" do
-    validation = Validatable::ValidatesConfirmationOf.new :username
-    validation.case_sensitive = true
+    validation = Validatable::ValidatesConfirmationOf.new :username, :case_sensitive => true
     instance = stub(:username=>"username", :username_confirmation=>"USERNAME")
     assert_equal false, validation.valid?(instance)
   end
   
   test "invalid confirmation if value is nil and confirmation is not with case sensitive true" do
-    validation = Validatable::ValidatesConfirmationOf.new :username
-    validation.case_sensitive = true
+    validation = Validatable::ValidatesConfirmationOf.new :username, :case_sensitive => true
     assert_equal false, validation.valid?(stub(:username => nil, :username_confirmation => 'something'))
   end
 
   test "invalid confirmation if confirmation is nil and value is not with case sensitive true" do
-    validation = Validatable::ValidatesConfirmationOf.new :username
-    validation.case_sensitive = true
+    validation = Validatable::ValidatesConfirmationOf.new :username, :case_sensitive => true
     assert_equal false, validation.valid?(stub(:username => 'something', :username_confirmation => nil))
   end
 
   test "valid confirmation if value and confirmation are nil with case sensitive true" do
-    validation = Validatable::ValidatesConfirmationOf.new :username
-    validation.case_sensitive = true
+    validation = Validatable::ValidatesConfirmationOf.new :username, :case_sensitive => true
     assert_equal true, validation.valid?(stub(:username => nil, :username_confirmation => nil))
   end
   
   test "invalid confirmation if value is nil and confirmation is not with case sensitive false" do
-    validation = Validatable::ValidatesConfirmationOf.new :username
-    validation.case_sensitive = false
+    validation = Validatable::ValidatesConfirmationOf.new :username, :case_sensitive => false
     assert_equal false, validation.valid?(stub(:username => nil, :username_confirmation => 'something'))
   end
 
   test "invalid confirmation if confirmation is nil and value is not with case sensitive false" do
-    validation = Validatable::ValidatesConfirmationOf.new :username
-    validation.case_sensitive = false
+    validation = Validatable::ValidatesConfirmationOf.new :username, :case_sensitive => false
     assert_equal false, validation.valid?(stub(:username => 'something', :username_confirmation => nil))
   end
 
   test "valid confirmation if value and confirmation are nil with case sensitive false" do
-    validation = Validatable::ValidatesConfirmationOf.new :username
-    validation.case_sensitive = false
+    validation = Validatable::ValidatesConfirmationOf.new :username, :case_sensitive => false
     assert_equal true, validation.valid?(stub(:username => nil, :username_confirmation => nil))
   end
   
