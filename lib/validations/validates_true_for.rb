@@ -1,6 +1,6 @@
 module Validatable
   class ValidatesTrueFor < ValidationBase #:nodoc:
-    option :logic
+    required_option :logic
   
     def valid?(instance)
       instance.instance_eval(&logic) == true

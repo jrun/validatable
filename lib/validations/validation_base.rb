@@ -68,6 +68,7 @@ module Validatable
         errors
       end
       raise ArgumentError.new("#{self.class} requires options: #{required_options.join(', ')}") if required_options.any?
+      true
     end
     
     def validate_this_time?

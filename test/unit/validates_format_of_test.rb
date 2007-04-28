@@ -24,7 +24,12 @@ class ValidatesFormatOfTest < Test::Unit::TestCase
   
   expect true do
     options = [:message, :if, :times, :level, :groups, :with]
-    Validatable::ValidatesFormatOf.new(:test, :with => //).must_understand(options.to_blank_options_hash)
+    Validatable::ValidatesFormatOf.new(:test, options.to_blank_options_hash).must_understand(options.to_blank_options_hash)
+  end
+  
+  expect true do
+    options = [:with]
+    Validatable::ValidatesFormatOf.new(:name, options.to_blank_options_hash).requires(options.to_blank_options_hash)
   end
   
 end

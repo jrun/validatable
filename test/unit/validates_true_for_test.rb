@@ -11,9 +11,20 @@ class ValidatesTrueForTest < Test::Unit::TestCase
     assert_equal true, validation.valid?(stub_everything)
   end
   
+  test "when no logic is given, then an error is raised during construction" do
+    assert_raises ArgumentError do
+      validation = Validatable::ValidatesTrueFor.new :age
+    end
+  end
+  
   expect true do
     options = [:message, :if, :times, :level, :groups, :logic]
-    Validatable::ValidatesTrueFor.new(:name).must_understand(options.to_blank_options_hash)
+    Validatable::ValidatesTrueFor.new(:name, options.to_blank_options_hash).must_understand(options.to_blank_options_hash)
+  end
+  
+  expect true do
+    options = [:logic]
+    Validatable::ValidatesTrueFor.new(:name, options.to_blank_options_hash).requires(options.to_blank_options_hash)
   end
   
 end
