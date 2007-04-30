@@ -40,7 +40,7 @@ module Validatable
     validation.run_after_validate(validation_result, self, validation.attribute)
   end
   
-  def add_error(attribute, message)
+  def add_error(attribute, message) #:nodoc:
     self.class.add_error(self, attribute, message)
   end
   

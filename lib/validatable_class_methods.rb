@@ -222,7 +222,7 @@ module Validatable
       @validations ||= []
     end
     
-    def add_error(instance, attribute, message)
+    def add_error(instance, attribute, message) #:nodoc:
       instance.errors.add(attribute, message)
     end
     
