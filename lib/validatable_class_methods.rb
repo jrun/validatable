@@ -200,7 +200,7 @@ module Validatable
       levels.sort.each do |level|
         self.validations.select { |validation| validation.level == level }.each do |validation|
           if validation.should_validate?(instance)
-            instance.errors.add(validation.attribute, validation.message) unless validation.valid?(instance)
+            add_error(instance, validation.attribute, validation.message) unless validation.valid?(instance)
           end
         end
         return if instance.errors.any?
@@ -213,7 +213,7 @@ module Validatable
         child = instance.send child_validation.attribute
         child.valid?(*groups)
         child.errors.each do |attribute, message|
-          instance.errors.add(child_validation.map[attribute.to_sym] || attribute, message)
+          add_error(instance, child_validation.map[attribute.to_sym] || attribute, message)
         end
       end
     end
@@ -221,8 +221,12 @@ module Validatable
     def validations #:nodoc:
       @validations ||= []
     end
-
+    
     protected
+    def add_error(instance, attribute, message)
+      instance.errors.add(attribute, message)
+    end
+    
     def add_validations(args, klass) #:nodoc:
       options = args.last.is_a?(Hash) ? args.pop : {}
       args.each do |attribute|
