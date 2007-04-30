@@ -35,6 +35,58 @@ module Functional
       assert_equal "can't be empty", instance.errors.on(:name)
     end
     
+    
+    test "when child validations have errors, level 2 and higher parent validations are not performed" do
+      child_class = Class.new do
+        include Validatable
+        attr_accessor :name
+        validates_presence_of :name
+      end
+      klass = Class.new do
+        include Validatable
+        extend Forwardable
+        
+        def_delegator :child, :name
+        
+        validates_true_for :name, :logic => lambda { false }, :level => 2, :message => "invalid message"
+        
+        include_validations_for :child 
+
+        define_method :child do
+          @child ||= child_class.new
+        end
+        
+      end
+      instance = klass.new
+      instance.valid?
+      assert_equal "can't be empty", instance.errors.on(:name)
+    end
+  
+   test "when child validations have errors, level 1 parent validations are still performed" do
+      child_class = Class.new do
+        include Validatable
+        attr_accessor :name
+        validates_presence_of :name
+        
+      end
+      klass = Class.new do
+        include Validatable
+
+        validates_true_for :address, :logic => lambda { false }, :level => 1, :message => "invalid message"
+
+        include_validations_for :child 
+
+        define_method :child do
+          @child ||= child_class.new
+        end
+
+      end
+      instance = klass.new
+      instance.valid?
+      assert_equal "can't be empty", instance.errors.on(:name)
+      assert_equal "invalid message", instance.errors.on(:address)
+    end
+  
     test "given a child class with validations, the error is in the parent objects error collection as the mapped attribute" do
       child_class = Class.new do
         include Validatable

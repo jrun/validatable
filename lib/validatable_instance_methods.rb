@@ -47,7 +47,7 @@ module Validatable
   end
   
   def validation_levels #:nodoc:
-    self.validations.collect { |validation| validation.level }.uniq.sort
+    self.validations.inject([1]) { |accum,validation| accum << validation.level }.uniq.sort
   end
   
   def validations #:nodoc:
