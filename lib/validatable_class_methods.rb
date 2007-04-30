@@ -222,10 +222,11 @@ module Validatable
       @validations ||= []
     end
     
-    protected
     def add_error(instance, attribute, message)
       instance.errors.add(attribute, message)
     end
+    
+    protected
     
     def add_validations(args, klass) #:nodoc:
       options = args.last.is_a?(Hash) ? args.pop : {}
