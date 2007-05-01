@@ -10,7 +10,7 @@ class ValidationAssertionCollectorTest < Test::Unit::TestCase
   
   expect "save this message" do
     assertions = ValidationAssertionCollector.gather(Class.new) do
-      presence_of(:name).message "save this message"
+      presence_of(:name).message("ignore this message").message("save this message")
     end
     assertions.first.options[:message]
   end

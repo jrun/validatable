@@ -15,3 +15,4 @@ require File.expand_path(File.dirname(__FILE__) + '/validations/validates_true_f
 require File.expand_path(File.dirname(__FILE__) + '/validations/validates_numericality_of')
 require File.expand_path(File.dirname(__FILE__) + '/validation_assertion')
 require File.expand_path(File.dirname(__FILE__) + '/validation_assertion_collector')
+require File.expand_path(File.dirname(__FILE__) + '/validatable_assertions')
