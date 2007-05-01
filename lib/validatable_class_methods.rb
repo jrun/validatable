@@ -195,18 +195,6 @@ module Validatable
       children_to_validate << ChildValidation.new(attribute_to_validate, options[:map] || {}, options[:if] || lambda { true })
     end
     
-    def validate(instance) #:nodoc:
-      levels = self.validations.collect { |validation| validation.level }.uniq
-      levels.sort.each do |level|
-        self.validations.select { |validation| validation.level == level }.each do |validation|
-          if validation.should_validate?(instance)
-            add_error(instance, validation.attribute, validation.message) unless validation.valid?(instance)
-          end
-        end
-        return if instance.errors.any?
-      end
-    end
-    
     def validate_children(instance, groups) #:nodoc:
       self.children_to_validate.each do |child_validation|
         next unless child_validation.should_validate?(instance)

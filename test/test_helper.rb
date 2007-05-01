@@ -14,7 +14,12 @@ class << Test::Unit::TestCase
   
   def expect(expected_value, &block)
     define_method :"test_#{caller.first.split("/").last}" do
-      assert_equal expected_value, instance_eval(&block)
+      begin
+        assert_equal expected_value, instance_eval(&block)
+      rescue StandardError => ex
+        raise ex if ex.class == Test::Unit::AssertionFailedError
+        assert_equal expected_value, ex.class
+      end
     end 
   end
 end

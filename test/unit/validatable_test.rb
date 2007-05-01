@@ -10,20 +10,6 @@ module Unit
       end
       klass.new.valid?
     end
-  
-    test "when validate is executed, then messages are added for each validation that fails" do
-      klass = Class.new do
-        include Validatable
-      end
-      klass.send(:validations) << stub(:valid? => false, :should_validate? => true, :attribute => 'attribute', :message => 'message', :level => 1)
-      klass.send(:validations) << stub(:valid? => false, :should_validate? => true, :attribute => 'attribute2', :message => 'message2', :level => 1)
-      instance=mock
-      instance.expects(:errors).returns(errors=mock).times 3
-      errors.expects(:add).with('attribute', 'message')
-      errors.expects(:add).with('attribute2', 'message2')
-      errors.expects(:any?).returns false
-      klass.validate(instance)
-    end
 
     expect true do
       klass = Class.new do
