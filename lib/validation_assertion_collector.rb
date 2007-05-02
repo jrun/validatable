@@ -13,6 +13,7 @@ class ValidationAssertionCollector
   end
 
   Validatable::ClassMethods.public_instance_methods.sort.grep(/^validates_/).each do |validation_method|
+    next if validation_method == 'validates_true_for'
     validatable_class = Validatable.const_get(validation_method.split(/_/).collect { |word| word.capitalize}.join)
     define_method_for_validation_method(validation_method, validatable_class)
   end
@@ -25,6 +26,7 @@ class ValidationAssertionCollector
     
   def define_methods_on_assertion_to_collect_options(validatable_class, assertion)
     validatable_class.all_understandings.each do |option|
+      next if option == :if
       class << assertion; self; end.instance_eval do
         define_method option do |value|
           self.options.merge!(option=>value)

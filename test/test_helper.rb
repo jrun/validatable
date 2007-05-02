@@ -17,7 +17,7 @@ class << Test::Unit::TestCase
       begin
         assert_equal expected_value, instance_eval(&block)
       rescue Exception => ex
-        raise ex unless ex.is_a?(expected_value)
+        raise ex unless expected_value.is_a?(Class) && ex.is_a?(expected_value)
         assert_equal expected_value, ex.class
       end
     end 

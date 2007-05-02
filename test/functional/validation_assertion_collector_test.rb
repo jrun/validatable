@@ -28,6 +28,18 @@ class ValidationAssertionCollectorTest < Test::Unit::TestCase
     end
   end
   
+  expect NoMethodError do
+    assertions = ValidationAssertionCollector.gather(Class.new) do
+      true_for(:name)
+    end
+  end
+  
+  expect NoMethodError do
+    assertions = ValidationAssertionCollector.gather(Class.new) do
+      presence_of(:name).if lambda { true }
+    end
+  end
+  
   expect Validatable::ValidatesPresenceOf do
     assertions = ValidationAssertionCollector.gather(Class.new) do
       presence_of(:name)
