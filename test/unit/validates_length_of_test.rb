@@ -2,10 +2,9 @@ require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 
 module Unit
   class ValidatesLengthOfTest < Test::Unit::TestCase
-    test "max length" do
+    expect false do
       validation = Validatable::ValidatesLengthOf.new :username, :maximum => 8
-      instance = stub(:username=>"usernamefdfd")
-      assert_equal false, validation.valid?(instance)
+      validation.valid?(stub(:username=>"usernamefdfd"))
     end
     
     test "min length" do
@@ -56,8 +55,21 @@ module Unit
       assert_equal false, validation.valid?(instance)
     end
 
+    test "given nil value, should not be valid" do
+      validation = Validatable::ValidatesLengthOf.new :username, :within => 2..4
+      instance = stub(:username => nil)
+      assert_equal false, validation.valid?(instance)
+    end
+
+
+    test "given allow_nil is true, nil value should be valid" do
+      validation = Validatable::ValidatesLengthOf.new :username, :within => 2..4, :allow_nil => true
+      instance = stub(:username => nil)
+      assert_equal true, validation.valid?(instance)
+    end
+    
     expect true do
-      options = [:message, :if, :times, :level, :groups, :maximum, :minimum, :is, :within]
+      options = [:message, :if, :times, :level, :groups, :maximum, :minimum, :is, :within, :allow_nil]
       Validatable::ValidatesLengthOf.new(:test).must_understand(options.to_blank_options_hash)
     end
     
