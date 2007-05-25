@@ -27,7 +27,7 @@ class ValidationAssertionCollectorTest < Test::Unit::TestCase
       presence_of(:name).invalid_option
     end
   end
-  
+    
   expect NoMethodError do
     assertions = ValidationAssertionCollector.gather(Class.new) do
       true_for(:name)

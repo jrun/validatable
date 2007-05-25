@@ -6,4 +6,8 @@ class ErrorsTest < Test::Unit::TestCase
     errors.add(:attribute, "message")
     errors.on(:attribute)
   end
+  
+  test "includes enumerable" do
+    assert_equal true, Validatable::Errors.included_modules.include?(Enumerable)
+  end
 end

@@ -1,8 +1,9 @@
 module Validatable
   class Errors
     extend Forwardable
+    include Enumerable
     
-    def_delegators :errors, :any?, :clear, :each, :each_pair, :empty?, :length, :size
+    def_delegators :errors, :clear, :each, :each_pair, :empty?, :length, :size
     
     # call-seq: on(attribute)
     # 
