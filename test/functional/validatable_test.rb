@@ -175,17 +175,17 @@ module Functional
       
       Validatable::ValidationBase.class_eval do
         after_validate do |result, instance, attribute|
-          instance.errors.add(attribute, instance.errors.on(attribute) + " changed message")
+          instance.errors.add(attribute, " changed message")
         end
       end
       Validatable::ValidatesPresenceOf.class_eval do
         after_validate do |result, instance, attribute|
-          instance.errors.add(attribute, instance.errors.on(attribute) + " twice")
+          instance.errors.add(attribute, " twice")
         end
       end
       instance = klass.new
       instance.valid?
-      assert_equal "can't be empty twice changed message", instance.errors.on(:name) 
+      assert_equal "can't be empty twice changed message", instance.errors.on(:name).join
       Validatable::ValidatesPresenceOf.after_validations.clear
       Validatable::ValidationBase.after_validations.clear
     end

@@ -60,6 +60,10 @@ module Validatable
       instance.instance_eval(&self.if) && validate_this_time?
     end
     
+    def message(instance)
+      @message.respond_to?(:call) ? instance.instance_eval(&@message) : @message
+    end
+    
     def validate_this_time?
       return true if @times.nil?
       self.times -= 1

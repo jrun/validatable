@@ -33,6 +33,11 @@ class ValidationBaseTest < Test::Unit::TestCase
     validation.level
   end
   
+  expect "some message 100" do
+    validation = Validatable::ValidationBase.new :base, :message => lambda { "some message #{a_method}" }
+    validation.message(stub(:a_method=>'100'))
+  end
+  
   test "invalid option causes raise" do
     assert_raises ArgumentError do
       Validatable::ValidationBase.new(:base).must_understand(:foo => 1, :bar => 2)

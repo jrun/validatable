@@ -6,7 +6,7 @@ module Validatable
       not (instance.send(self.attribute).to_s =~ self.with).nil?
     end
     
-    def message
+    def message(instance)
       super || "is invalid"
     end
   end

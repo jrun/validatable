@@ -7,6 +7,19 @@ class ErrorsTest < Test::Unit::TestCase
     errors.on(:attribute)
   end
   
+  expect ["message"] do
+    errors = Validatable::Errors.new
+    errors.add(:attribute, "message")
+    errors.raw(:attribute)
+  end
+  
+  expect "something new" do
+    errors = Validatable::Errors.new
+    errors.add(:attribute, "something old")
+    errors.replace(:attribute, ["something new"])
+    errors.on(:attribute)
+  end
+  
   expect "Capitalized word" do
     errors = Validatable::Errors.new
     errors.humanize("capitalized_word")
@@ -26,5 +39,12 @@ class ErrorsTest < Test::Unit::TestCase
   
   test "includes enumerable" do
     assert_equal true, Validatable::Errors.included_modules.include?(Enumerable)
+  end
+  
+  expect ["message1", "message2"] do
+    errors = Validatable::Errors.new
+    errors.add(:attribute, "message1")
+    errors.add(:attribute, "message2")
+    errors.on(:attribute)
   end
 end

@@ -4,7 +4,7 @@ module Validatable
       instance.send(self.attribute) == "true"
     end
     
-    def message
+    def message(instance)
       super || "must be accepted"
     end
   end

@@ -6,7 +6,7 @@ module Validatable
       instance.instance_eval(&logic) == true
     end
     
-    def message
+    def message(instance)
       super || "is invalid"
     end
   end

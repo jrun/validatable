@@ -5,7 +5,7 @@ module Validatable
       instance.send(self.attribute).respond_to?(:strip) ? instance.send(self.attribute).strip.length != 0 : true
     end
     
-    def message
+    def message(instance)
       super || "can't be empty"
     end
   end

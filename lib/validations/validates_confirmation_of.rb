@@ -8,7 +8,7 @@ module Validatable
       instance.send(self.attribute).to_s.casecmp(instance.send("#{self.attribute}_confirmation".to_sym).to_s) == 0
     end
     
-    def message
+    def message(instance)
       super || "doesn't match confirmation"
     end
   end

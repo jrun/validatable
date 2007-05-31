@@ -36,7 +36,7 @@ module Validatable
 
   def run_validation(validation) #:nodoc:
     validation_result = validation.valid?(self)
-    add_error(validation.attribute, validation.message) unless validation_result
+    add_error(validation.attribute, validation.message(self)) unless validation_result
     validation.run_after_validate(validation_result, self, validation.attribute)
   end
   

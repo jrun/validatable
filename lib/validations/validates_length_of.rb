@@ -2,7 +2,7 @@ module Validatable
   class ValidatesLengthOf < ValidationBase #:nodoc:
     option :minimum, :maximum, :is, :within, :allow_nil
     
-    def message
+    def message(instance)
       super || "is invalid"
     end
     

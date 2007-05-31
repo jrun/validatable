@@ -8,7 +8,7 @@ module Validatable
       not (value =~ regex).nil?
     end
     
-    def message
+    def message(instance)
       super || "must be a number"
     end
   end

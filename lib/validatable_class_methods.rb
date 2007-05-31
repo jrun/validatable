@@ -200,8 +200,14 @@ module Validatable
         next unless child_validation.should_validate?(instance)
         child = instance.send child_validation.attribute
         child.valid?(*groups)
-        child.errors.each do |attribute, message|
-          add_error(instance, child_validation.map[attribute.to_sym] || attribute, message)
+        child.errors.each do |attribute, messages|
+          if messages.is_a?(String)
+            add_error(instance, child_validation.map[attribute.to_sym] || attribute, messages)
+          else
+            messages.each do |message|
+              add_error(instance, child_validation.map[attribute.to_sym] || attribute, message)
+            end
+          end
         end
       end
     end
@@ -210,8 +216,8 @@ module Validatable
       @validations ||= []
     end
     
-    def add_error(instance, attribute, message) #:nodoc:
-      instance.errors.add(attribute, message)
+    def add_error(instance, attribute, msg) #:nodoc:
+      instance.errors.add(attribute, msg)
     end
     
     protected

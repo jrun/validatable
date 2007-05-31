@@ -7,14 +7,17 @@ module Validatable
 
     # call-seq: on(attribute)
     # 
-    # Returns nil, if no errors are associated with the specified attribute.
-    # Returns the error message, if one error is associated with the specified attribute.
+    # * Returns nil, if no errors are associated with the specified +attribute+.
+    # * Returns the error message, if one error is associated with the specified +attribute+.
+    # * Returns an array of error messages, if more than one error is associated with the specified +attribute+.
     def on(attribute)
-      errors[attribute.to_sym]
+      return nil if errors[attribute.to_sym].nil?
+      errors[attribute.to_sym].size == 1 ? errors[attribute.to_sym].first : errors[attribute.to_sym]
     end
-
+    
     def add(attribute, message) #:nodoc:
-      errors[attribute.to_sym] = message
+      errors[attribute.to_sym] = [] if errors[attribute.to_sym].nil?
+      errors[attribute.to_sym] << message
     end
 
     def merge!(errors) #:nodoc:
@@ -22,6 +25,14 @@ module Validatable
       self
     end
 
+    def replace(attribute, value)
+      errors[attribute.to_sym] = value
+    end
+
+    def raw(attribute)
+      errors[attribute.to_sym]
+    end
+    
     def errors #:nodoc:
       @errors ||= {}
     end
