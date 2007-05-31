@@ -26,10 +26,13 @@ module Validatable
       @errors ||= {}
     end
 
-    def count
+    def count #:nodoc:
       size
     end
 
+    # call-seq: full_messages -> an_array_of_messages
+    # 
+    # Returns an array containing the full list of error messages.
     def full_messages
       full_messages = []
 
@@ -47,7 +50,7 @@ module Validatable
       full_messages
     end
     
-    def humanize(lower_case_and_underscored_word)
+    def humanize(lower_case_and_underscored_word) #:nodoc:
       lower_case_and_underscored_word.to_s.gsub(/_id$/, "").gsub(/_/, " ").capitalize
     end
   end
