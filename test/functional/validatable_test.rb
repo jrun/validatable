@@ -223,7 +223,7 @@ module Functional
     expect true do
       klass = Class.new do
         include Validatable
-        validates_presence_of :name, :times => 1
+        validates_presence_of :name, :times => 1, :key => 1
         attr_accessor :name
       end
       instance = klass.new
@@ -234,7 +234,7 @@ module Functional
     expect false do
       klass = Class.new do
         include Validatable
-        validates_presence_of :name, :times => 1
+        validates_presence_of :name, :times => 1, :key => 1
         attr_accessor :name
       end
       instance1 = klass.new
