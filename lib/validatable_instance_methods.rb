@@ -17,17 +17,17 @@ module Validatable
     @errors ||= Validatable::Errors.new
   end
   
-  protected
-  def valid_for_group?(*groups) #:nodoc:
+  def valid_for_group?(group=nil) #:nodoc:
     errors.clear
-    self.class.validate_children(self, groups)
-    self.validate(groups)
+    self.class.validate_children(self, group)
+    self.validate(group)
     errors.empty?
   end
 
-  def validate(groups) #:nodoc:
+  protected
+  def validate(group) #:nodoc:
     validation_levels.each do |level|
-      validations_for_level_and_groups(level, groups).each do |validation|
+      validations_for_level_and_group(level, group).each do |validation|
         run_validation(validation) if validation.should_validate?(self)
       end
       return unless self.errors.empty?
@@ -44,10 +44,10 @@ module Validatable
     self.class.add_error(self, attribute, message)
   end
   
-  def validations_for_level_and_groups(level, groups) #:nodoc:
+  def validations_for_level_and_group(level, group) #:nodoc:
     validations_for_level = self.validations.select { |validation| validation.level == level }
-    return validations_for_level if groups.empty?
-    validations_for_level.select { |validation| (groups & validation.groups).any? }
+    return validations_for_level if group.nil?
+    validations_for_level.select { |validation| validation.groups.include?(group) }
   end
   
   def validation_levels #:nodoc:

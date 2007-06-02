@@ -58,7 +58,9 @@ module Validatable
     end
     
     def raise_error_if_times_but_no_key(options)
-      raise ArgumentError.new("#{self.class} requires :key if :times is given") if options.has_key?(:times) && !options.has_key?(:key)
+      if options.has_key?(:times) && !options.has_key?(:key)
+        raise ArgumentError.new("#{self.class} requires :key if :times is given") 
+      end
     end
     
     def should_validate?(instance)
