@@ -8,24 +8,22 @@ class ValidationBaseTest < Test::Unit::TestCase
   
   expect true do
     validation = Validatable::ValidationBase.new :base, :times => 1, :key => 1
-    validation.validate_this_time?
+    validation.validate_this_time?(stub(:times_validated => 0))
   end
   
   expect true do
     validation = Validatable::ValidationBase.new :base
-    validation.validate_this_time?
+    validation.validate_this_time?(nil)
   end
   
   expect true do
     validation = Validatable::ValidationBase.new :base, :times => 2, :key => 1
-    validation.validate_this_time?
-    validation.validate_this_time?
+    validation.validate_this_time?(stub(:times_validated => 1))
   end
 
   expect false do
     validation = Validatable::ValidationBase.new :base, :times => 1, :key => 1
-    validation.validate_this_time?
-    validation.validate_this_time?
+    validation.validate_this_time?(stub(:times_validated => 1))
   end
   
   expect 1 do

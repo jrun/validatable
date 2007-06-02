@@ -64,7 +64,7 @@ module Validatable
     end
     
     def should_validate?(instance)
-      result = validate_this_time?
+      result = validate_this_time?(instance)
       result &&= instance.instance_eval(&self.if) unless self.if.nil?
       result
     end
@@ -73,10 +73,9 @@ module Validatable
       @message.respond_to?(:call) ? instance.instance_eval(&@message) : @message
     end
     
-    def validate_this_time?
+    def validate_this_time?(instance)
       return true if @times.nil?
-      self.times -= 1
-      self.times >= 0
+      self.times > instance.times_validated(self.key)
     end
     
     def run_after_validate(result, instance, attribute)

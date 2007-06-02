@@ -60,20 +60,16 @@ module Functional
         attr_accessor :name
         validates_presence_of :name
       end
+      
       klass = Class.new do
         include Validatable
         extend Forwardable
-        
         def_delegator :child, :name
-        
         validates_true_for :name, :logic => lambda { false }, :level => 2, :message => "invalid message"
-        
         include_validations_for :child 
-
         define_method :child do
           @child ||= child_class.new
         end
-        
       end
       instance = klass.new
       instance.valid?
@@ -85,15 +81,12 @@ module Functional
         include Validatable
         attr_accessor :name
         validates_presence_of :name
-        
       end
+
       klass = Class.new do
         include Validatable
-
         validates_true_for :address, :logic => lambda { false }, :level => 1, :message => "invalid message"
-
         include_validations_for :child 
-
         define_method :child do
           @child ||= child_class.new
         end
@@ -184,7 +177,7 @@ module Functional
       assert_equal nil, instance.errors.on(:name)
     end
     
-    test "after validate is called following a validation" do
+    expect "can't be empty twice changed message" do
       klass = Class.new do
         include Validatable
         validates_presence_of :name
@@ -203,39 +196,39 @@ module Functional
       end
       instance = klass.new
       instance.valid?
-      assert_equal "can't be empty twice changed message", instance.errors.on(:name).join
       Validatable::ValidatesPresenceOf.after_validations.clear
       Validatable::ValidationBase.after_validations.clear
+      instance.errors.on(:name).join
     end
 
-    test "matching groups are used as validations when multiple groups are given to valid" do
+    expect false do
       klass = Class.new do
         include Validatable
         validates_presence_of :name, :groups => :group_one
         attr_accessor :name
       end
       instance = klass.new
-      assert_equal false, instance.valid_for_group_one?
+      instance.valid_for_group_one?
     end
     
-    test "matching groups are used as validations when validations are part of multiple groups" do
+    expect false do
       klass = Class.new do
         include Validatable
         validates_presence_of :name, :groups => [:group_one, :group_two]
         attr_accessor :name
       end
       instance = klass.new
-      assert_equal false, instance.valid_for_group_one?
+      instance.valid_for_group_one?
     end
     
-    test "no group given then all validations are used" do
+    expect false do
       klass = Class.new do
         include Validatable
         validates_presence_of :name, :groups => :group_one
         attr_accessor :name
       end
       instance = klass.new
-      assert_equal false, instance.valid?
+      instance.valid?
     end
     
     expect true do

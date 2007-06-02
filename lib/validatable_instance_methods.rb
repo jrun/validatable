@@ -23,6 +23,24 @@ module Validatable
     self.validate(group)
     errors.empty?
   end
+  
+  def times_validated(key)
+    times_validated_hash[key] || 0
+  end
+  
+  def times_validated_hash
+    @times_validated_hash ||= {}
+  end
+  
+  def increment_times_validated_for(validation)
+    if validation.key != nil
+      if times_validated_hash[validation.key].nil?
+        times_validated_hash[validation.key] = 1
+      else
+        times_validated_hash[validation.key] += 1
+      end
+    end
+  end
 
   protected
   def validate(group) #:nodoc:
@@ -37,6 +55,7 @@ module Validatable
   def run_validation(validation) #:nodoc:
     validation_result = validation.valid?(self)
     add_error(validation.attribute, validation.message(self)) unless validation_result
+    increment_times_validated_for(validation)
     validation.run_after_validate(validation_result, self, validation.attribute)
   end
   
@@ -45,16 +64,12 @@ module Validatable
   end
   
   def validations_for_level_and_group(level, group) #:nodoc:
-    validations_for_level = self.validations.select { |validation| validation.level == level }
+    validations_for_level = self.class.validations.select { |validation| validation.level == level }
     return validations_for_level if group.nil?
     validations_for_level.select { |validation| validation.groups.include?(group) }
   end
   
   def validation_levels #:nodoc:
-    self.validations.inject([1]) { |accum,validation| accum << validation.level }.uniq.sort
-  end
-  
-  def validations #:nodoc:
-    @validations ||= self.class.validations.collect { |validation| validation.dup }
+    self.class.validations.inject([1]) { |accum,validation| accum << validation.level }.uniq.sort
   end
 end
