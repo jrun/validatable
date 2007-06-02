@@ -224,6 +224,10 @@ module Validatable
       instance.errors.add(attribute, msg)
     end
     
+    def validation_keys_include?(key)
+      validations.map { |validation| validation.key }.include?(key)
+    end
+    
     protected
     
     def add_validations(args, klass) #:nodoc:

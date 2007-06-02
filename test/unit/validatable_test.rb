@@ -20,6 +20,21 @@ module Unit
       instance.valid?
       instance.errors.empty?
     end
-  
+    
+    expect false do
+      klass = Class.new do
+        include Validatable
+      end
+      klass.validation_keys_include?("anything")
+    end
+    
+    expect true do
+      validation = stub_everything(:key => "key")
+      klass = Class.new do
+        include Validatable
+        validations << validation
+      end
+      klass.validation_keys_include?("key")
+    end
   end
 end

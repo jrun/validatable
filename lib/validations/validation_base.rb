@@ -42,23 +42,25 @@ module Validatable
     include Requireable
     
     option :message, :if, :times, :level, :groups, :key
-    default :level => 1, :groups => [], :key => "key"
+    default :level => 1, :groups => []
     attr_accessor :attribute
     
     def initialize(klass, attribute, options={})
       must_understand options
       requires options
-      raise_error_if_dup_keys(klass)
       self.class.all_understandings.each do |understanding|
         options[understanding] = self.class.all_defaults[understanding] unless options.has_key? understanding
         self.instance_variable_set("@#{understanding}", options[understanding])
       end
       self.attribute = attribute
       self.groups = [self.groups] unless self.groups.is_a?(Array)
-      self.key = "#{self.class.name}:#{self.attribute}:#{self.key}"
+      self.key = "#{self.class.name}:#{self.attribute}:#{self.key || "key"}" unless self.times.nil?
+      raise_error_if_key_is_dup(klass) unless self.key.nil?
     end
     
-    def raise_error_if_dup_keys(options)
+    def raise_error_if_key_is_dup(klass)
+      message = "key #{self.key} must be unique, provide the :key option to specify a unique key"
+      raise ArgumentError.new(message) if klass.validation_keys_include? self.key
     end
     
     def should_validate?(instance)

@@ -7,7 +7,7 @@ class ValidationBaseTest < Test::Unit::TestCase
   end
   
   expect true do
-    validation = Validatable::ValidationBase.new stub, :base, :times => 1
+    validation = Validatable::ValidationBase.new stub_everything, :base, :times => 1
     validation.validate_this_time?(stub(:times_validated => 0))
   end
   
@@ -17,33 +17,33 @@ class ValidationBaseTest < Test::Unit::TestCase
   end
   
   expect true do
-    validation = Validatable::ValidationBase.new stub, :base, :times => 2
+    validation = Validatable::ValidationBase.new stub_everything, :base, :times => 2
     validation.validate_this_time?(stub(:times_validated => 1))
   end
 
   expect "Validatable::ValidationBase:base:key" do
-    validation = Validatable::ValidationBase.new stub, :base, :times => 1, :key => "key"
+    validation = Validatable::ValidationBase.new stub_everything, :base, :times => 1, :key => "key"
     validation.key
   end
   
   expect "Validatable::ValidationBase:base:key" do
-    validation = Validatable::ValidationBase.new stub, :base, :times => 1
+    validation = Validatable::ValidationBase.new stub_everything, :base, :times => 1
     validation.key
   end
   
   expect false do
-    validation = Validatable::ValidationBase.new stub, :base, :times => 1
+    validation = Validatable::ValidationBase.new stub_everything, :base, :times => 1
     validation.validate_this_time?(stub(:times_validated => 1))
   end
   
   expect 1 do
-    validation = Validatable::ValidationBase.new stub, :base
+    validation = Validatable::ValidationBase.new stub_everything, :base
     validation.level
   end
   
-  # expect ArgumentError do
-  #   Validatable::ValidationBase.new stub, :base, :times => 1
-  # end
+  expect ArgumentError do
+    Validatable::ValidationBase.new stub(:validation_keys_include? => true), :base, :times => 1
+  end
   
   expect "some message 100" do
     validation = Validatable::ValidationBase.new stub, :base, :message => lambda { "some message #{a_method}" }
