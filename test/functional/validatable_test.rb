@@ -15,7 +15,7 @@ module Functional
       instance.valid?
     end
     
-    test "given a child class with validations, when parent class is validated, then the error is in the parent objects error collection" do
+    expect "is invalid" do
       child_class = Class.new do
         include Validatable
         attr_accessor :name, :address
@@ -31,8 +31,26 @@ module Functional
       end
       instance = klass.new
       instance.valid?
-      assert_equal "is invalid", instance.errors.on(:address)
-      assert_equal "can't be empty", instance.errors.on(:name)
+      instance.errors.on(:address)
+    end
+    
+    expect "can't be empty" do
+      child_class = Class.new do
+        include Validatable
+        attr_accessor :name, :address
+        validates_presence_of :name
+        validates_format_of :address, :with => /.+/
+      end
+      klass = Class.new do
+        include Validatable
+        include_validations_for :child 
+        define_method :child do
+          child_class.new
+        end
+      end
+      instance = klass.new
+      instance.valid?
+      instance.errors.on(:name)
     end
     
     
@@ -87,7 +105,7 @@ module Functional
       assert_equal "invalid message", instance.errors.on(:address)
     end
   
-    test "given a child class with validations, the error is in the parent objects error collection as the mapped attribute" do
+    expect "can't be empty" do
       child_class = Class.new do
         include Validatable
         attr_accessor :name, :address
@@ -102,10 +120,10 @@ module Functional
       end
       instance = klass.new
       instance.valid?
-      assert_equal "can't be empty", instance.errors.on(:namen)
+      instance.errors.on(:namen)
     end
     
-    test "given a child class with validations, the error is in the parent objects error collection when the 'if' evals to true" do
+    expect "can't be empty" do
       child_class = Class.new do
         include Validatable
         attr_accessor :name, :address
@@ -120,10 +138,10 @@ module Functional
       end
       instance = klass.new
       instance.valid?
-      assert_equal "can't be empty", instance.errors.on(:name)
+      instance.errors.on(:name)
     end
     
-    test "given a child class with validations, the error is not in the parent objects error collection when the if evals to false" do
+    expect true do
       child_class = Class.new do
         include Validatable
         attr_accessor :name, :address
@@ -137,7 +155,7 @@ module Functional
         end
       end
       instance = klass.new
-      assert_equal true, instance.valid?
+      instance.valid?
     end
     
     test "classes only have valid_for_* methods for groups that appear in their validations" do
