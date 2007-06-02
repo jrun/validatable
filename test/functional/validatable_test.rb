@@ -12,6 +12,15 @@ module Functional
       end
     end
     
+    expect ArgumentError do
+      Class.new do
+        include Validatable
+        attr_accessor :name
+        validates_presence_of :name, :times => 1, :key => 'anything'
+        validates_presence_of :name, :times => 1, :key => 'anything'
+      end
+    end
+    
     expect "is invalid" do
       child_class = Class.new do
         include Validatable
