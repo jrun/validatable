@@ -42,7 +42,7 @@ module Validatable
     include Requireable
     
     option :message, :if, :times, :level, :groups
-    default :if => lambda { true }, :level => 1, :groups => []
+    default :level => 1, :groups => []
     attr_accessor :attribute
     
     def initialize(attribute, options={})
@@ -57,7 +57,9 @@ module Validatable
     end
     
     def should_validate?(instance)
-      instance.instance_eval(&self.if) && validate_this_time?
+      result = validate_this_time?
+      result &&= instance.instance_eval(&self.if) unless self.if.nil?
+      result
     end
     
     def message(instance)
