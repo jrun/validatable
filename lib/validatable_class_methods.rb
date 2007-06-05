@@ -224,7 +224,7 @@ module Validatable
       instance.errors.add(attribute, msg)
     end
     
-    def validation_keys_include?(key)
+    def validation_keys_include?(key) #:nodoc:
       validations.map { |validation| validation.key }.include?(key)
     end
     

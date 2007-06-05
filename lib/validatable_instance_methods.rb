@@ -24,15 +24,11 @@ module Validatable
     errors.empty?
   end
   
-  def times_validated(key)
+  def times_validated(key) #:nodoc:
     times_validated_hash[key] || 0
   end
   
-  def times_validated_hash
-    @times_validated_hash ||= {}
-  end
-  
-  def increment_times_validated_for(validation)
+  def increment_times_validated_for(validation) #:nodoc:
     if validation.key != nil
       if times_validated_hash[validation.key].nil?
         times_validated_hash[validation.key] = 1
@@ -43,6 +39,10 @@ module Validatable
   end
 
   protected
+  def times_validated_hash #:nodoc:
+    @times_validated_hash ||= {}
+  end
+
   def validate(group) #:nodoc:
     validation_levels.each do |level|
       validations_for_level_and_group(level, group).each do |validation|
