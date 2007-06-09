@@ -3,7 +3,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 module Unit
   class ValidatableTest < Test::Unit::TestCase
     expect false do
-      validation = stub_everything(:valid? => false, :should_validate? => true, :attribute => "attribute", :level => 1)
+      validation = stub_everything(:should_validate? => true, :attribute => "attribute", :level => 1, :groups => [])
       klass = Class.new do
         include Validatable
         validations << validation

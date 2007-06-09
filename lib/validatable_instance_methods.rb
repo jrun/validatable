@@ -7,7 +7,7 @@ module Validatable
   #
   # Returns true if no errors were added otherwise false.
   def valid?
-    valid_for_group?
+    valid_for_group?(nil)
   end
   
   # call-seq: errors
@@ -17,7 +17,7 @@ module Validatable
     @errors ||= Validatable::Errors.new
   end
   
-  def valid_for_group?(group=nil) #:nodoc:
+  def valid_for_group?(group) #:nodoc:
     errors.clear
     self.class.validate_children(self, group)
     self.validate(group)
@@ -65,7 +65,7 @@ module Validatable
   
   def validations_for_level_and_group(level, group) #:nodoc:
     validations_for_level = self.class.validations.select { |validation| validation.level == level }
-    return validations_for_level if group.nil?
+    return validations_for_level.select { |validation| validation.groups.empty? } if group.nil?
     validations_for_level.select { |validation| validation.groups.include?(group) }
   end
   

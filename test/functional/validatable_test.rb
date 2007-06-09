@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 
 module Functional
-  class ValidatableTest < Test::Unit::TestCase
+  class ValidatableTest < Test::Unit::TestCase 
     
     expect ArgumentError do
       Class.new do
@@ -227,7 +227,19 @@ module Functional
       instance.valid_for_group_one?
     end
     
-    expect false do
+    expect true do
+      klass = Class.new do
+        include Validatable
+        validates_presence_of :name, :groups => :group_one
+        validates_presence_of :address
+        attr_accessor :name, :address
+      end
+      instance = klass.new
+      instance.address = 'anything'
+      instance.valid?
+    end
+    
+    expect true do
       klass = Class.new do
         include Validatable
         validates_presence_of :name, :groups => :group_one
