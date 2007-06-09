@@ -25,10 +25,16 @@ module Validatable
       self
     end
 
+    # call-seq: replace(attribute)
+    # 
+    # * Replaces the errors value for the given +attribute+
     def replace(attribute, value)
       errors[attribute.to_sym] = value
     end
 
+    # call-seq: raw(attribute)
+    # 
+    # * Returns an array of error messages associated with the specified +attribute+.
     def raw(attribute)
       errors[attribute.to_sym]
     end

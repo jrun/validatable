@@ -1,6 +1,6 @@
 module Validatable
   module Requireable #:nodoc:
-    module ClassMethods
+    module ClassMethods #:nodoc:
       def requires(*args)
         required_options.concat args        
       end

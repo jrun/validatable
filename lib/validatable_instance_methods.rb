@@ -1,11 +1,12 @@
 module Validatable
   def self.included(klass) #:nodoc:
     klass.extend Validatable::ClassMethods
+    klass.extend Validatable::Macros
   end
   
   # call-seq: valid?
   #
-  # Returns true if no errors were added otherwise false.
+  # Returns true if no errors were added otherwise false. Only executes validations that have no :groups option specified
   def valid?
     valid_for_group?(nil)
   end

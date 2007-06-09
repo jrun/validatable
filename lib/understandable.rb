@@ -1,6 +1,6 @@
 module Validatable
   module Understandable #:nodoc:
-    module ClassMethods
+    module ClassMethods #:nodoc:
       def understands(*args)
         understandings.concat args
       end

@@ -1,4 +1,4 @@
-class ValidationAssertion
+class ValidationAssertion #:nodoc:
   attr_accessor :klass, :validation_type, :options, :attribute
   
   def initialize(klass, validation_type, attribute)

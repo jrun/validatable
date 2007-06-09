@@ -1,6 +1,7 @@
 require 'forwardable'
 require File.expand_path(File.dirname(__FILE__) + '/errors')
 require File.expand_path(File.dirname(__FILE__) + '/validatable_class_methods')
+require File.expand_path(File.dirname(__FILE__) + '/macros')
 require File.expand_path(File.dirname(__FILE__) + '/validatable_instance_methods')
 require File.expand_path(File.dirname(__FILE__) + '/child_validation')
 require File.expand_path(File.dirname(__FILE__) + '/understandable')

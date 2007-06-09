@@ -1,4 +1,4 @@
-class ValidationAssertionCollector
+class ValidationAssertionCollector #:nodoc:
   def self.gather(klass, &block)
     collector = self.new(klass)
     collector.instance_eval(&block)
@@ -12,7 +12,7 @@ class ValidationAssertionCollector
     end
   end
 
-  Validatable::ClassMethods.public_instance_methods.sort.grep(/^validates_/).each do |validation_method|
+  Validatable::Macros.public_instance_methods.sort.grep(/^validates_/).each do |validation_method|
     next if validation_method == 'validates_true_for'
     validatable_class = Validatable.const_get(validation_method.split(/_/).collect { |word| word.capitalize}.join)
     define_method_for_validation_method(validation_method, validatable_class)
