@@ -21,6 +21,21 @@ module Validatable
         end
       end
     end
+    
+    def before_validation(&block)
+      before_validations << block
+    end
+    
+    def all_before_validations
+      if self.superclass.respond_to? :all_before_validations
+        return before_validations + self.superclass.all_before_validations 
+      end
+      before_validations
+    end
+    
+    def before_validations
+      @before_validations ||= []
+    end
 
     def all_validations
       return validations + self.superclass.all_validations if self.superclass.respond_to? :all_validations

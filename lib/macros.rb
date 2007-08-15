@@ -13,12 +13,13 @@ module Validatable
     #
     # Configuration options:
     # 
+    #     * after_validate - A block that executes following the run of a validation
+    #     * group - The group that this validation belongs to.  A validation can belong to multiple groups
+    #     * if - A block that when executed must return true of the validation will not occur
+    #     * level - The level at which the validation should occur
+    #     * logic - A block that executes to perform the validation
     #     * message - The message to add to the errors collection when the validation fails
     #     * times - The number of times the validation applies
-    #     * level - The level at which the validation should occur
-    #     * if - A block that when executed must return true of the validation will not occur
-    #     * group - The group that this validation belongs to.  A validation can belong to multiple groups
-    #     * logic - A block that executes to perform the validation    def validates_each(*args)
     def validates_each(*args)
       add_validations(args, ValidatesEach)
     end
@@ -37,6 +38,7 @@ module Validatable
     # 
     # Configuration options:
     # 
+    #     * after_validate - A block that executes following the run of a validation
     #     * message - The message to add to the errors collection when the validation fails
     #     * times - The number of times the validation applies
     #     * level - The level at which the validation should occur
@@ -59,6 +61,7 @@ module Validatable
     # 
     # Configuration options:
     # 
+    #     * after_validate - A block that executes following the run of a validation
     #     * message - The message to add to the errors collection when the validation fails
     #     * times - The number of times the validation applies
     #     * level - The level at which the validation should occur
@@ -83,6 +86,7 @@ module Validatable
     # 
     # Configuration options:
     # 
+    #     * after_validate - A block that executes following the run of a validation
     #     * message - The message to add to the errors collection when the validation fails
     #     * times - The number of times the validation applies
     #     * level - The level at which the validation should occur
@@ -105,6 +109,7 @@ module Validatable
     #
     # Configuration options:
     # 
+    #     * after_validate - A block that executes following the run of a validation
     #     * message - The message to add to the errors collection when the validation fails
     #     * times - The number of times the validation applies
     #     * level - The level at which the validation should occur
@@ -131,6 +136,7 @@ module Validatable
     #
     # Configuration options:
     # 
+    #     * after_validate - A block that executes following the run of a validation
     #     * case_sensitive - Whether or not to apply case-sensitivity on the comparison.  Defaults to true.
     #     * message - The message to add to the errors collection when the validation fails
     #     * times - The number of times the validation applies
@@ -154,6 +160,7 @@ module Validatable
     #
     # Configuration options:
     # 
+    #     * after_validate - A block that executes following the run of a validation
     #     * message - The message to add to the errors collection when the validation fails
     #     * times - The number of times the validation applies
     #     * level - The level at which the validation should occur
@@ -176,6 +183,7 @@ module Validatable
     #
     # Configuration options:
     # 
+    #     * after_validate - A block that executes following the run of a validation
     #     * message - The message to add to the errors collection when the validation fails
     #     * times - The number of times the validation applies
     #     * level - The level at which the validation should occur

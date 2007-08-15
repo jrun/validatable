@@ -41,7 +41,7 @@ module Validatable
     include Understandable
     include Requireable
     
-    option :message, :if, :times, :level, :groups, :key
+    option :message, :if, :times, :level, :groups, :key, :after_validate
     default :level => 1, :groups => []
     attr_accessor :attribute
     
@@ -82,6 +82,7 @@ module Validatable
       self.class.all_after_validations.each do |block|
         block.call result, instance, attribute
       end
+      instance.instance_eval_with_params result, attribute, &self.after_validate unless self.after_validate.nil?
     end
   end
 end

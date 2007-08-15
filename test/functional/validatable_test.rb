@@ -1,6 +1,31 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 
 functional_tests do
+  expect :is_set do
+    klass = Class.new do
+      include Validatable
+      attr_accessor :result
+      before_validation do
+        self.result = :is_set
+      end
+    end
+    
+    instance = klass.new
+    instance.valid?
+    instance.result
+  end
+  
+  expect :is_set do
+    klass = Class.new do
+      include Validatable
+      attr_accessor :name, :result
+      validates_presence_of :name, :after_validate => lambda { |result, attribute| self.result = :is_set }
+    end
+
+    instance = klass.new
+    instance.valid?
+    instance.result
+  end
 
   expect false do
     klass = Class.new do

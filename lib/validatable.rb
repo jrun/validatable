@@ -1,4 +1,5 @@
 require 'forwardable'
+require File.expand_path(File.dirname(__FILE__) + '/object_extension')
 require File.expand_path(File.dirname(__FILE__) + '/errors')
 require File.expand_path(File.dirname(__FILE__) + '/validatable_class_methods')
 require File.expand_path(File.dirname(__FILE__) + '/macros')

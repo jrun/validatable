@@ -19,6 +19,7 @@ module Validatable
   end
   
   def valid_for_group?(group) #:nodoc:
+    run_before_validations
     errors.clear
     self.class.validate_children(self, group)
     self.validate(group)
@@ -58,6 +59,12 @@ module Validatable
     add_error(validation.attribute, validation.message(self)) unless validation_result
     increment_times_validated_for(validation)
     validation.run_after_validate(validation_result, self, validation.attribute)
+  end
+  
+  def run_before_validations
+    self.class.all_before_validations.each do |block|
+      instance_eval &block
+    end
   end
   
   def add_error(attribute, message) #:nodoc:
