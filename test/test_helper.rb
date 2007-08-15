@@ -1,6 +1,7 @@
 require 'test/unit'
 require 'rubygems'
 require 'mocha'
+require 'dust'
 require 'set'
 
 require File.dirname(__FILE__) + '/../lib/validatable'

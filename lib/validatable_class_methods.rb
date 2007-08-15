@@ -22,6 +22,11 @@ module Validatable
       end
     end
 
+    def all_validations
+      return validations + self.superclass.all_validations if self.superclass.respond_to? :all_validations
+      validations
+    end
+
     def validations
       @validations ||= []
     end

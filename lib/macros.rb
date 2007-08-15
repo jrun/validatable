@@ -1,5 +1,28 @@
 module Validatable
   module Macros
+    # call-seq: validates_true_for(*args)
+    # 
+    # Validates that the logic evaluates to true
+    # 
+    #   class Address
+    #     include Validatable
+    #     validates_each :zip_code, :logic => lambda { errors.add(:zip_code, "is not valid") if ZipCodeService.allows(zip_code) }
+    #   end
+    #
+    # The logic option is required.
+    #
+    # Configuration options:
+    # 
+    #     * message - The message to add to the errors collection when the validation fails
+    #     * times - The number of times the validation applies
+    #     * level - The level at which the validation should occur
+    #     * if - A block that when executed must return true of the validation will not occur
+    #     * group - The group that this validation belongs to.  A validation can belong to multiple groups
+    #     * logic - A block that executes to perform the validation    def validates_each(*args)
+    def validates_each(*args)
+      add_validations(args, ValidatesEach)
+    end
+    
     # call-seq: validates_format_of(*args)
     # 
     # Validates whether the value of the specified attribute is of the 

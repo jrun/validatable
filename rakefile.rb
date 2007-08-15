@@ -29,7 +29,7 @@ Gem::manage_gems
 specification = Gem::Specification.new do |s|
 	s.name   = "validatable"
   s.summary = "Validatable is a library for adding validations."
-	s.version = "1.5.2"
+	s.version = "1.6.1"
 	s.author = 'Jay Fields'
 	s.description = "Validatable is a library for adding validations."
 	s.email = 'validatable-developer@rubyforge.org'
@@ -38,7 +38,7 @@ specification = Gem::Specification.new do |s|
 
   s.has_rdoc = true
   s.extra_rdoc_files = ['README']
-  s.rdoc_options << '--title' << 'SQL DSL' << '--main' << 'README' << '--line-numbers'
+  s.rdoc_options << '--title' << 'Validatable' << '--main' << 'README' << '--line-numbers'
 
   s.autorequire = 'validatable'
   s.files = FileList['{lib,test}/**/*.rb', '[A-Z]*$', 'rakefile.rb'].to_a

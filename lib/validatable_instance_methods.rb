@@ -65,12 +65,12 @@ module Validatable
   end
   
   def validations_for_level_and_group(level, group) #:nodoc:
-    validations_for_level = self.class.validations.select { |validation| validation.level == level }
+    validations_for_level = self.class.all_validations.select { |validation| validation.level == level }
     return validations_for_level.select { |validation| validation.groups.empty? } if group.nil?
     validations_for_level.select { |validation| validation.groups.include?(group) }
   end
   
   def validation_levels #:nodoc:
-    self.class.validations.inject([1]) { |accum,validation| accum << validation.level }.uniq.sort
+    self.class.all_validations.inject([1]) { |result, validation| result << validation.level }.uniq.sort
   end
 end
