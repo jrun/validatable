@@ -227,5 +227,9 @@ module Validatable
     def include_validations_for(attribute_to_validate, options = {})
       children_to_validate << ChildValidation.new(attribute_to_validate, options[:map] || {}, options[:if] || lambda { true })
     end
+    
+    def before_validation(&block)
+      before_validations << block
+    end
   end
 end
