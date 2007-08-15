@@ -1,6 +1,6 @@
 module Validatable
   module Macros
-    # call-seq: validates_true_for(*args)
+    # call-seq: validates_each(*args)
     # 
     # Validates that the logic evaluates to true
     # 
