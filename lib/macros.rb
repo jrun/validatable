@@ -228,6 +228,19 @@ module Validatable
       children_to_validate << ChildValidation.new(attribute_to_validate, options[:map] || {}, options[:if] || lambda { true })
     end
     
+    # call-seq: before_validation(&block)
+    # 
+    # Is called before valid? or valid_for_*?
+    # 
+    #   class Person
+    #     include Validatable
+    #     before_validation do
+    #       self.name = "default name"
+    #     end
+    # 
+    #     attr_accessor :name
+    #   end
+    # 
     def before_validation(&block)
       before_validations << block
     end

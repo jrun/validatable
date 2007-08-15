@@ -1,5 +1,6 @@
-class Object
-  module InstanceExecHelper; end
+class Object #:nodoc:
+  module InstanceExecHelper #:nodoc:
+  end
   include InstanceExecHelper
   def instance_eval_with_params(*args, &block)
     begin
