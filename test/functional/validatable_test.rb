@@ -1,6 +1,44 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 
 functional_tests do
+
+  expect "can't be empty" do
+    child_class = Module.new do
+      include Validatable
+      validates_presence_of :name
+    end
+    klass = Class.new do
+      include Validatable
+      include_validations_from :child 
+      define_method :child do
+        child_class
+      end
+      attr_accessor :name
+    end
+    instance = klass.new
+    instance.valid?
+    instance.errors.on(:name)
+  end
+  
+  expect "can't be empty" do
+    child_class = Module.new do
+      include Validatable
+      validates_presence_of :name
+    end
+    klass = Class.new do
+      include Validatable
+      validates_presence_of :address
+      include_validations_from :child 
+      define_method :child do
+        child_class
+      end
+      attr_accessor :name, :address
+    end
+    instance = klass.new
+    instance.valid?
+    instance.errors.on(:address)
+  end
+  
   expect :is_set do
     klass = Class.new do
       include Validatable
@@ -91,7 +129,7 @@ functional_tests do
     end
     klass = Class.new do
       include Validatable
-      include_validations_for :child 
+      include_errors_from :child 
       define_method :child do
         child_class.new
       end
@@ -110,7 +148,7 @@ functional_tests do
     end
     klass = Class.new do
       include Validatable
-      include_validations_for :child 
+      include_errors_from :child 
       define_method :child do
         child_class.new
       end
@@ -133,7 +171,7 @@ functional_tests do
       extend Forwardable
       def_delegator :child, :name
       validates_true_for :name, :logic => lambda { false }, :level => 2, :message => "invalid message"
-      include_validations_for :child 
+      include_errors_from :child 
       define_method :child do
         @child ||= child_class.new
       end
@@ -153,7 +191,7 @@ functional_tests do
     klass = Class.new do
       include Validatable
       validates_true_for :address, :logic => lambda { false }, :level => 1, :message => "invalid message"
-      include_validations_for :child 
+      include_errors_from :child 
       define_method :child do
         @child ||= child_class.new
       end
@@ -173,7 +211,7 @@ functional_tests do
     end
     klass = Class.new do
       include Validatable
-      include_validations_for :child, :map => {:name => :namen}
+      include_errors_from :child, :map => {:name => :namen}
       define_method :child do
         child_class.new
       end
@@ -191,7 +229,7 @@ functional_tests do
     end
     klass = Class.new do
       include Validatable
-      include_validations_for :child, :if => lambda { true }
+      include_errors_from :child, :if => lambda { true }
       define_method :child do
         child_class.new
       end
@@ -209,7 +247,7 @@ functional_tests do
     end
     klass = Class.new do
       include Validatable
-      include_validations_for :child, :if => lambda { false }
+      include_errors_from :child, :if => lambda { false }
       define_method :child do
         child_class.new
       end

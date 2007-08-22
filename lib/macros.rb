@@ -194,7 +194,41 @@ module Validatable
       add_validations(args, ValidatesTrueFor)
     end
     
-    # call-seq: include_validations_for(attribute_to_validate, options = {})
+    # call-seq: include_validations_from(attribute)
+    # 
+    # Validates the specified attributes.
+    #   class Person
+    #     include Validatable
+    #     validates_presence_of :name
+    #   end
+    # 
+    #   class PersonPresenter
+    #     include Validatable
+    #     include_validataions_from :person, :if => lambda { not person.nil? }
+    #     attr_accessor :person
+    #     def name
+    #       person.name
+    #     end
+    #
+    #     def initialize(person)
+    #       @person = person
+    #     end
+    #   end
+    #   
+    #   presenter = PersonPresenter.new(Person.new)
+    #   presenter.valid? #=> false
+    #   presenter.errors.on(:name) #=> "can't be blank"
+    #
+    # The name attribute will be validated.
+    #
+    # Configuration options:
+    # 
+    #     * if - A block that when executed must return true of the validation will not occur.
+    def include_validations_from(attribute_to_validate, options = {})
+      validations_to_include << IncludedValidation.new(attribute_to_validate)
+    end
+
+    # call-seq: include_errors_from(attribute_to_validate, options = {})
     # 
     # Validates the specified attributes.
     #   class Person
@@ -205,7 +239,7 @@ module Validatable
     # 
     #   class PersonPresenter
     #     include Validatable
-    #     include_validations_for :person, :map => { :name => :namen }, :if => lambda { not person.nil? }
+    #     include_errors_from :person, :map => { :name => :namen }, :if => lambda { not person.nil? }
     #     attr_accessor :person
     #     
     #     def initialize(person)
@@ -224,7 +258,12 @@ module Validatable
     # 
     #     * map - A hash that maps attributes of the child to attributes of the parent.
     #     * if - A block that when executed must return true of the validation will not occur.
+    def include_errors_from(attribute_to_validate, options = {})
+      children_to_validate << ChildValidation.new(attribute_to_validate, options[:map] || {}, options[:if] || lambda { true })
+    end
+    
     def include_validations_for(attribute_to_validate, options = {})
+      puts "include_validations_for is deprecated; use include_errors_from instead"
       children_to_validate << ChildValidation.new(attribute_to_validate, options[:map] || {}, options[:if] || lambda { true })
     end
     

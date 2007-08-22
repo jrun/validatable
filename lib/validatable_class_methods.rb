@@ -34,7 +34,9 @@ module Validatable
     end
 
     def all_validations
-      return validations + self.superclass.all_validations if self.superclass.respond_to? :all_validations
+      if self.respond_to?(:superclass) && self.superclass.respond_to?(:all_validations)
+        return validations + self.superclass.all_validations 
+      end
       validations
     end
 
@@ -48,6 +50,10 @@ module Validatable
     
     def validation_keys_include?(key)
       validations.map { |validation| validation.key }.include?(key)
+    end
+    
+    def validations_to_include
+      @validations_to_include ||= []
     end
     
     protected

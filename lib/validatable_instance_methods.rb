@@ -72,9 +72,16 @@ module Validatable
   end
   
   def validations_for_level_and_group(level, group) #:nodoc:
-    validations_for_level = self.class.all_validations.select { |validation| validation.level == level }
+    validations_for_level = self.all_validations.select { |validation| validation.level == level }
     return validations_for_level.select { |validation| validation.groups.empty? } if group.nil?
     validations_for_level.select { |validation| validation.groups.include?(group) }
+  end
+  
+  def all_validations
+    res = self.class.validations_to_include.inject(self.class.all_validations) do |result, included_validation_class|
+      result += self.send(included_validation_class.attribute).all_validations
+      result
+    end
   end
   
   def validation_levels #:nodoc:
