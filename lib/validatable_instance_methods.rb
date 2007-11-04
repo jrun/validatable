@@ -71,7 +71,7 @@ module Validatable
     validation.run_after_validate(validation_result, self, validation.attribute)
   end
   
-  def run_before_validations
+  def run_before_validations #:nodoc:
     self.class.all_before_validations.each do |block|
       instance_eval &block
     end
@@ -87,7 +87,7 @@ module Validatable
     validations_for_level.select { |validation| validation.groups.include?(group) }
   end
   
-  def all_validations
+  def all_validations #:nodoc:
     res = self.class.validations_to_include.inject(self.class.all_validations) do |result, included_validation_class|
       result += self.send(included_validation_class.attribute).all_validations
       result
