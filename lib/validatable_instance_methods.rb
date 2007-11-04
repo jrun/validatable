@@ -40,6 +40,16 @@ module Validatable
     end
   end
 
+  def validate_only(key)
+    validation_name, attribute_name = key.split("/")
+    validation_name = validation_name.split("_").collect{|word| word.capitalize}.join
+    validation_key = "#{self.class.name}/Validatable::Validates#{validation_name}/#{attribute_name}"
+    validation = self.class.all_validations.find { |validation| validation.key == validation_key }
+    raise ArgumentError.new("validation with key #{validation_key} could not be found") if validation.nil?
+    errors.clear
+    run_validation(validation)
+  end
+
   protected
   def times_validated_hash #:nodoc:
     @times_validated_hash ||= {}

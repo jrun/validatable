@@ -394,4 +394,44 @@ functional_tests do
     instance.valid?
     instance.errors.on(:address)
   end
+  
+  expect "Mod::Klass/Validatable::ValidatesPresenceOf/name" do
+    module Mod
+      class Klass
+        include Validatable
+        validates_presence_of :name
+      end
+    end
+    Mod::Klass.validations.first.key
+  end
+
+  expect "/Validatable::ValidatesPresenceOf/custom key" do
+    klass = Class.new do
+      include Validatable
+      validates_presence_of :name, :key => "custom key"
+    end
+    klass.validations.first.key
+  end
+  
+  expect "can't be empty" do
+    klass = Class.new do
+      include Validatable
+      validates_presence_of :name, :address
+      attr_accessor :name, :address
+    end
+    instance = klass.new
+    instance.validate_only("presence_of/name")
+    instance.errors.on(:name)
+  end
+
+  expect nil do
+    klass = Class.new do
+      include Validatable
+      validates_presence_of :name, :address
+      attr_accessor :name, :address
+    end
+    instance = klass.new
+    instance.validate_only("presence_of/name")
+    instance.errors.on(:address)
+  end
 end

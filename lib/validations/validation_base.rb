@@ -54,8 +54,8 @@ module Validatable
       end
       self.attribute = attribute
       self.groups = [self.groups] unless self.groups.is_a?(Array)
-      self.key = "#{self.class.name}:#{self.attribute}:#{self.key || "key"}" unless self.times.nil?
-      raise_error_if_key_is_dup(klass) unless self.key.nil?
+      self.key = "#{klass.name}/#{self.class.name}/#{self.key || self.attribute}"
+      raise_error_if_key_is_dup(klass)
     end
     
     def raise_error_if_key_is_dup(klass)

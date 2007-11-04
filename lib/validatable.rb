@@ -17,6 +17,3 @@ require File.expand_path(File.dirname(__FILE__) + '/validations/validates_length
 require File.expand_path(File.dirname(__FILE__) + '/validations/validates_true_for')
 require File.expand_path(File.dirname(__FILE__) + '/validations/validates_numericality_of')
 require File.expand_path(File.dirname(__FILE__) + '/validations/validates_each')
-require File.expand_path(File.dirname(__FILE__) + '/validation_assertion')
-require File.expand_path(File.dirname(__FILE__) + '/validation_assertion_collector')
-require File.expand_path(File.dirname(__FILE__) + '/validatable_assertions')

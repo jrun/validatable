@@ -196,7 +196,7 @@ module Validatable
     
     # call-seq: include_validations_from(attribute)
     # 
-    # Validates the specified attributes.
+    # Includes all the validations that are defined on the attribute.
     #   class Person
     #     include Validatable
     #     validates_presence_of :name
@@ -204,7 +204,7 @@ module Validatable
     # 
     #   class PersonPresenter
     #     include Validatable
-    #     include_validataions_from :person, :if => lambda { not person.nil? }
+    #     include_validataions_from :person
     #     attr_accessor :person
     #     def name
     #       person.name
@@ -219,11 +219,7 @@ module Validatable
     #   presenter.valid? #=> false
     #   presenter.errors.on(:name) #=> "can't be blank"
     #
-    # The name attribute will be validated.
-    #
-    # Configuration options:
-    # 
-    #     * if - A block that when executed must return true of the validation will not occur.
+    # The name attribute whose validations should be added.
     def include_validations_from(attribute_to_validate, options = {})
       validations_to_include << IncludedValidation.new(attribute_to_validate)
     end
@@ -262,7 +258,7 @@ module Validatable
       children_to_validate << ChildValidation.new(attribute_to_validate, options[:map] || {}, options[:if] || lambda { true })
     end
     
-    def include_validations_for(attribute_to_validate, options = {})
+    def include_validations_for(attribute_to_validate, options = {}) #:nodoc:
       puts "include_validations_for is deprecated; use include_errors_from instead"
       children_to_validate << ChildValidation.new(attribute_to_validate, options[:map] || {}, options[:if] || lambda { true })
     end
