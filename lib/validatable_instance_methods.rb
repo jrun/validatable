@@ -40,6 +40,12 @@ module Validatable
     end
   end
 
+  # call-seq: validate_only(key)
+  #
+  # Only executes a specified validation. The argument should follow a pattern based on the key of the validation.
+  #   Examples:
+  #     * validates_presence_of :name can be run with obj.validate_only("presence_of/name")
+  #     * validates_presence_of :birthday, :key => "a key" can be run with obj.validate_only("presence_of/a key")
   def validate_only(key)
     validation_name, attribute_name = key.split("/")
     validation_name = validation_name.split("_").collect{|word| word.capitalize}.join
