@@ -3,6 +3,7 @@ require 'rubygems'
 require 'mocha'
 require 'dust'
 require 'set'
+require 'expectations'
 
 require File.dirname(__FILE__) + '/../lib/validatable'
 

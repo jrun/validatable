@@ -1,16 +1,16 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 
-class ValidatesAcceptanceOfTest < Test::Unit::TestCase
-  test "valid acceptance" do
+Expectations do
+  expect true do
     validation = Validatable::ValidatesAcceptanceOf.new stub_everything, :acceptance
     instance = stub(:acceptance=>'true')
-    assert_equal true, validation.valid?(instance)
+    validation.valid?(instance)
   end
   
-  test "invalid acceptance" do
+  expect false do
     validation = Validatable::ValidatesAcceptanceOf.new stub_everything, :acceptance
     instance = stub(:acceptance=>'false')
-    assert_equal false, validation.valid?(instance)
+    validation.valid?(instance)
   end
   
   expect true do

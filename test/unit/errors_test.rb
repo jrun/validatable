@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 
-class ErrorsTest < Test::Unit::TestCase
+Expectations do
   expect "message" do
     errors = Validatable::Errors.new
     errors.add(:attribute, "message")
@@ -37,8 +37,8 @@ class ErrorsTest < Test::Unit::TestCase
     errors.full_messages.sort
   end
   
-  test "includes enumerable" do
-    assert_equal true, Validatable::Errors.included_modules.include?(Enumerable)
+  expect true do
+    Validatable::Errors.included_modules.include?(Enumerable)
   end
   
   expect ["message1", "message2"] do

@@ -1,20 +1,19 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 
-class ValidatesTrueForTest < Test::Unit::TestCase
-  test "when block returns false for attribute value, then valid is false" do
+Expectations do
+  
+  expect false do
     validation = Validatable::ValidatesTrueFor.new stub_everything, :name, :logic => lambda { false }
-    assert_equal false, validation.valid?(stub_everything)
+    validation.valid?(stub_everything)
   end
   
-  test "when block returns true for attribute value, then valid is false" do
+  expect true do
     validation = Validatable::ValidatesTrueFor.new stub_everything, :name, :logic => lambda { true }
-    assert_equal true, validation.valid?(stub_everything)
+    validation.valid?(stub_everything)
   end
   
-  test "when no logic is given, then an error is raised during construction" do
-    assert_raises ArgumentError do
-      validation = Validatable::ValidatesTrueFor.new stub_everything, :age
-    end
+  expect ArgumentError do
+    validation = Validatable::ValidatesTrueFor.new stub_everything, :age
   end
   
   expect true do

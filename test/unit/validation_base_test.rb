@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 
-class ValidationBaseTest < Test::Unit::TestCase
+Expectations do
   expect true do
     validation = Validatable::ValidationBase.new stub_everything, :base
     validation.should_validate? Object.new
