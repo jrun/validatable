@@ -14,7 +14,7 @@ module Validatable
       return nil if errors[attribute.to_sym].nil?
       errors[attribute.to_sym].size == 1 ? errors[attribute.to_sym].first : errors[attribute.to_sym]
     end
-    
+
     def add(attribute, message) #:nodoc:
       errors[attribute.to_sym] = [] if errors[attribute.to_sym].nil?
       errors[attribute.to_sym] << message
@@ -44,7 +44,7 @@ module Validatable
     end
 
     def count #:nodoc:
-      size
+      errors.values.flatten.size
     end
 
     # call-seq: full_messages -> an_array_of_messages
