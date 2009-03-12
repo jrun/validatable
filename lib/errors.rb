@@ -5,6 +5,20 @@ module Validatable
 
     def_delegators :errors, :clear, :each, :each_pair, :empty?, :length, :size
 
+    # Returns true if the specified +attribute+ has errors associated with it.
+    #
+    #   class Company < ActiveRecord::Base
+    #     validates_presence_of :name, :address, :email
+    #     validates_length_of :name, :in => 5..30
+    #   end
+    #
+    #   company = Company.create(:address => '123 First St.')
+    #   company.errors.invalid?(:name)      # => true
+    #   company.errors.invalid?(:address)   # => false
+    def invalid?(attribute)
+      !@errors[attribute.to_s].nil?
+    end
+
     # call-seq: on(attribute)
     # 
     # * Returns nil, if no errors are associated with the specified +attribute+.
