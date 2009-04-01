@@ -16,7 +16,7 @@ module Validatable
     #   company.errors.invalid?(:name)      # => true
     #   company.errors.invalid?(:address)   # => false
     def invalid?(attribute)
-      !@errors[attribute.to_s].nil?
+      !@errors[attribute.to_sym].nil?
     end
 
     # call-seq: on(attribute)
